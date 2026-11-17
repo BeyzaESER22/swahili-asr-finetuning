@@ -17,20 +17,24 @@ Fine-tuning may improve transcription accuracy, but this is a testable hypothesi
 | 0. Coordination | Assigned language, dataset, member tasks | Confirm no other group uses Swahili or same training dataset |
 | 1. Dataset feasibility | Source/license sheet, sample audit, duration/speaker counts | Can obtain trusted transcripts and keep raw/cleaned data in repo |
 | 2. Protocol | Fixed split IDs, normalization, metric unit tests | No speaker or exact audio duplication across splits |
-| 3. Required baselines | All instructor-listed vanilla implementations and run scripts | Baselines completed on one held-out test split |
+| 3. Baseline and comparator | One mandatory Whisper-Tiny main baseline + one optional wav2vec2-CTC pretrained comparator | Both inference runs evaluate on same held-out test split |
 | 4. Contribution | Reproducible training/fine-tuning script and checkpoint provenance | Separately identify original training contribution |
 | 5. Comparison | WER/CER CSV, per-utterance outputs, error analysis | Every number is regenerated from committed code |
 | 6. Submission | Per-person contribution histories, repo audit, PPTX | Public clean repo and on-time commits; slide timing checked |
 
-## Proposed experimental matrix — subject to lecturer baseline requirements
-| Track | Model family | Treatment | Status |
-| --- | --- | --- | --- |
-| Vanilla | Multilingual Whisper, exact checkpoint TBD | Zero additional group training | Planned |
-| Trained contribution | Same Whisper checkpoint | Swahili supervised fine-tuning | Planned |
-| Vanilla comparator | Language-compatible wav2vec2-CTC ASR model (actual ASR head), exact checkpoint TBD | No additional group training | Optional until Week 9 baseline confirmation |
-| Optional ablation | Fine-tuned Whisper | 25% / 50% / 100% training data, fixed validation/test | Planned only if feasible |
+## Agreed three-run experiment matrix
 
-Do not call an encoder-only HuBERT/wav2vec2 checkpoint an ASR baseline: it requires a transcription head. Advanced pretrained models are still **baselines** without group training.
+| Experiment | Model | Classification | Training by group |
+| --- | --- | --- | --- |
+| E1 | Whisper-Tiny (`openai/whisper-tiny`; revision to pin) | **ONE main vanilla baseline** | No |
+| E2 | Swahili-capable wav2vec2-CTC checkpoint with ASR head (ID to verify) | Additional pretrained comparator; *technically another baseline*, not our contribution | No |
+| E3 | Fine-tuned Whisper-Tiny, initialized from E1 | **Trained model contribution** | Yes, one fine-tuning job |
+
+**Dataset ceiling:** maximum 10 hours of **total audio**; suggested allocations 8h train, 1h validation, 1h test; measure actual clip durations and preserve disjoint speakers. Training-runtime ceiling is NOT guaranteed; use a brief training throughput pilot, adjust batch size/steps/epoch if needed. Only training corpus should be drawn from the selected permitted dataset and no test utterance should leak into training.
+
+Student confirmation: no other group uses the selected dataset. Instructor's **one main baseline** requirement is treated as known from student clarification, with written Week 9 rule recheck only if additional material conflicts.
+
+Wav2vec2 must be a full CTC-ASR checkpoint with a trained transcription head; an encoder-only checkpoint is not a usable ASR model. All three model runs use identical held-out test IDs, reference text, normalization, WER/CER.
 
 ## Metrics / statistical interpretation
 WER is the primary ASR task metric, not text-classification accuracy. CER helps with agglutinative/morphological spelling errors. Compute both with one frozen normalization policy, identical reference/hypothesis handling, and report sample counts. Inspect specific substitutions/deletions/insertions. Use latency only under consistent hardware, batch size and decoding parameters.
@@ -43,7 +47,7 @@ Beyza: repository structure, methodology/project flow, source evaluation, datase
 Other team members: dataset download/cleaning, actual audio/raw/cleaned uploads, real-world splitting/QA, model baselines, fine-tuning, evaluation and reproducibility; assign actual names only after agreement. Each member will create their **own** contribution file and commits. No contribution is attributed to another person at this stage.
 
 ## Before any training
-- Obtain instructor's exhaustive Week 9 baseline list and minimum usable dataset size.
+- Instructor requirement reported by student: one main baseline. Cross-check any contradictory Week 9 written instruction and confirm minimum usable dataset size.
 - Confirm no other group selected Swahili / identical training dataset.
 - Record official Common Voice release, variant, actual download, licensing and exact file hashes.
 - Determine audio subset size compatible with lecturer's data-in-repo rule, including potential Git LFS.

@@ -2,6 +2,10 @@
 
 Research notes prepared 2026-11-17 by Beyza Eser as the **dataset research/selection** deliverable. The downloading, cleaning, clip QA, splitting and upload work is explicitly delegated to the team's future data engineering owner (not Beyza). **Selection is provisional: no audio or transcript files have been downloaded to this repository.**
 
+## Confirmed group selection and corpus budget
+
+The student confirmed no other group chose the selected dataset. **Maximum selected usable audio: 10 hours total**, with ~8 hours for training, ~1 hour validation and ~1 hour test. Duration must be measured from real clips (not converted from number of rows). Speaker-disjoint selection may make split lengths approximate. Instructor minimum-hours/full-credit criteria remain unconfirmed. This dataset research is Beyza's responsibility; actual downloading and cleaning remain **assigned to other members**.
+
 ## Primary candidate: Mozilla Common Voice Scripted Speech v27.0 — Swahili
 - Locale: `sw` (Kiswahili); task: read-speech ASR; formats include MP3 clips and tabular metadata.
 - Official dataset catalog identifies **CC0-1.0** and **20.89 GB** for the full Swahili package. This is the *published archive size*, not the target training subset.
@@ -38,11 +42,11 @@ The current `src/audit_manifest.py` is a **limited metadata/path audit only**; i
 | Decision | Value |
 | --- | --- |
 | Primary dataset | Common Voice Scripted Speech v27.0 Swahili (candidate) |
-| Language availability confirmed with classmates | PENDING |
-| Training dataset uniqueness confirmed | PENDING |
+| Language availability confirmed with classmates | YES — user confirmed no overlap |
+| Training dataset uniqueness confirmed | YES — user confirmed no overlap |
 | Source archive downloaded and hashed | NO |
 | Dataset terms individually reviewed before sharing | PENDING |
-| Acceptable audio subset size / Git LFS | PENDING |
+| Selected dataset target / Git LFS | <=10 total hours targeted; Git LFS compliance PENDING |
 | Audio quality audit and actual cleaned files | NOT STARTED |
 | Speaker-disjoint splits validated on real data | NOT STARTED |
 | Instructor baseline and dataset-size rules | PENDING |

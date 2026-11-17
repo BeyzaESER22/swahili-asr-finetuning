@@ -1,5 +1,5 @@
 {
-  "status": "PROPOSAL_ONLY",
+  "status": "PLAN_APPROVED_NO_DATA_OR_TRAINING",
   "seed": 42,
   "language": "sw",
   "primary_dataset": "Mozilla Common Voice Scripted Speech 27.0 Swahili (candidate)",
@@ -8,7 +8,47 @@
   "secondary_metric": "CER",
   "model_checkpoint": null,
   "model_revision": null,
-  "mandatory_baseline_list_verified": false,
-  "dataset_uniqueness_confirmed": false,
-  "data_in_repo_confirmed": false
+  "mandatory_baseline_list_verified": true,
+  "dataset_uniqueness_confirmed": true,
+  "data_in_repo_confirmed": false,
+  "total_audio_hours_max": 10,
+  "target_split_hours": {
+    "train": 8,
+    "validation": 1,
+    "test": 1
+  },
+  "actual_split_hours": null,
+  "dataset_uniqueness_evidence": "User confirmed no other group overlap; documentation evidence pending",
+  "mandatory_baseline_count": 1,
+  "baseline_requirement_source": "User clarified one baseline required; reconcile if new written instructor requirements conflict",
+  "runs": [
+    {
+      "id": "E1",
+      "role": "main_baseline",
+      "architecture": "Whisper encoder-decoder",
+      "model_id": "openai/whisper-tiny",
+      "model_revision": null,
+      "group_training": false,
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "E2",
+      "role": "additional_pretrained_comparator_baseline_type",
+      "architecture": "wav2vec2-CTC ASR",
+      "model_id": null,
+      "model_revision": null,
+      "requires_swahili_asr_head": true,
+      "group_training": false,
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "E3",
+      "role": "trained_contribution",
+      "architecture": "Whisper encoder-decoder",
+      "base_model_id": "openai/whisper-tiny",
+      "base_model_revision": null,
+      "group_training": true,
+      "status": "NOT_RUN"
+    }
+  ]
 }

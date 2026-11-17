@@ -4,7 +4,7 @@ This document is the **acceptance checklist**. It does not claim the instructor 
 
 | Instructor concern | What must exist in the submitted repo | Current status |
 | --- | --- | --- |
-| All course/project baselines in vanilla form, training code included | Exact Week 9 list, one runnable baseline per required method, same test IDs and scoring | PENDING Week 9 list; NOT IMPLEMENTED |
+| One main required course baseline + optional comparator | E1 vanilla Whisper-Tiny as main baseline, E2 pretrained Wav2Vec2-CTC ASR comparator, same test IDs and scoring | Student confirmed one required baseline; both NOT RUN |
 | One individually named contributions file per member | `contributions/NAME_STUDENTID_GITHUBUSERNAME.md`, own changes visible in Git history | Beyza file exists; future members pending |
 | Raw AND cleaned datasets within repo | Real audio + metadata in both locations, cleaning script and log, valid permitted Git/LFS packaging | NOT COMPLETED; placeholder README files only |
 | Each member commits from their account | Authored PRs/commits per actual participant; co-author trailers alone not enough | Beyza initial commit only |
@@ -15,16 +15,16 @@ This document is the **acceptance checklist**. It does not claim the instructor 
 | Fully reproducible | Fixed seeds, pinned versions, configs, checkpoints or exact reproducible training route, generated final numbers | Initial utilities only; no training yet |
 | Notebooks and Colab | All notebooks/scripts committed, no manual uploads | No notebooks yet |
 | Tests test actual ML/data work | Dataset integrity, split leakage, WER/CER, baseline prediction and train smoke tests | Starter unit tests available; **not run here** |
-| Unique dataset | Document group-wide dataset coordination | NOT CONFIRMED |
+| Unique dataset | Document group-wide dataset coordination | User confirmed no other-group overlap; documentary evidence pending |
 | Actual cleaning, not reformatting | Verified real data problems, decisions, removal log, enough usable speech | NOT COMPLETED |
 | Public repo and deadline | Public incognito link, complete PPTX + GitHub URL, last commit before deadline | Public repo exists; submission pending |
 
 ## Critical quality gates
-- **G0:** Instructor's exact Week 9 mandatory list + group dataset uniqueness confirmed.
-- **G1:** Dataset owner commits real raw and cleaned audio+metadata and measured cleaning evidence, size approved.
+- **G0:** One required baseline confirmed by the student; designated E1 vanilla Whisper-Tiny; user confirmed dataset uniqueness. Reconcile if newer written instructor instructions conflict.
+- **G1:** Dataset owner commits real raw and cleaned audio+metadata and measured cleaning evidence, **<=10h total audio (~8h train, ~1h val, ~1h test)**, with instructor minimum accepted.
 - **G2:** Frozen speaker-disjoint split, no overlap, metric unit tests.
-- **G3:** Every mandatory vanilla baseline, **including training code when needed**, reproducible.
-- **G4:** Fine-tuned contribution trained independently and evaluated vs vanilla on same test set.
+- **G3:** E1 main vanilla Whisper-Tiny baseline and E2 additional pretrained wav2vec2-CTC ASR comparator reproducible on same test. Both are technically baseline-type experiments.
+- **G4:** E3 fine-tuned Whisper-Tiny contribution trained independently once, evaluated against E1 (and E2) on the same test set.
 - **G5:** Final benchmark generated directly from code/predictions; audit each filename and contribution commit.
 - **G6:** Incognito public-link verification and deadline-stamped commit; PPTX submitted.
 

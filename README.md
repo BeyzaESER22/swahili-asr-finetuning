@@ -13,10 +13,26 @@ Evaluate **automatic speech recognition (ASR)** for Swahili (`sw`) using a commo
 
 **Start from [docs/TEAM_TASKS.md](docs/TEAM_TASKS.md)** for explicit inputs, steps, commands/acceptance tests, evidence and grading traps. Do not start fine-tuning until dataset and instructor-baseline gates pass.
 
+## Agreed experiment scope (team decision, 2026-11-17)
+
+**Two ASR architectures, three evaluation runs, only one fine-tuning training job:**
+
+| Run | Concrete planned model | Role in our report | Group training |
+| --- | --- | --- | --- |
+| E1 | `openai/whisper-tiny` (pin exact revision before use) | **Main course baseline** (vanilla pretrained inference) | None |
+| E2 | Swahili-compatible wav2vec2 **CTC ASR checkpoint with a transcription head**, ID/revision to be validated | **Additional pretrained comparator** (also technically a baseline; not a new model contribution) | None |
+| E3 | E1 Whisper-Tiny checkpoint fine-tuned on the selected Swahili training split | **Our trained contribution** | Fine-tuning required |
+
+All three runs must use the **same frozen test utterances**, transcription normalization, WER/CER code and test IDs. E1 and E2 require inference; E3 requires training. The lecturer requires **one main baseline**, as clarified by the student; E2 is explicitly an *additional baseline-type comparison*, not a second required course baseline. If written Project 3 instructions later differ, reconcile them before submission.
+
+**Resource cap:** maximum **10 hours of usable audio in the selected corpus overall**, target **8h training + 1h validation + 1h test**, measured by actual clip durations rather than count. Speaker-disjoint splitting means the exact 8/1/1 ratio may be approximate. The 10-hour cap is a **data budget**, not a guaranteed 6–13 hour runtime; run a short timing pilot and adjust training steps, hardware or schedule. No real data has been acquired yet.
+
+**Dataset overlap:** the student confirmed the chosen dataset does not overlap other groups; retain that confirmation in the coordination notes. Dataset minimum-hours threshold from the instructor has not been provided.
+
 ## Critical decisions (not yet approved)
-1. Confirm Swahili language and *training dataset* do not overlap any other group's choices. Coordinate before training.
-2. Confirm the instructor's exhaustive Project 3 / Week 9 **mandatory baseline list**. This repository does not treat the proposed models as the complete required list.
-3. Select a feasible licensed subset of Mozilla Common Voice Scripted Speech v27.0 (Swahili); decide whether Google FLEURS is an optional *external test*, not interchangeable training data.
+1. Other-group overlap was checked and reported as absent by the student; retain documentary confirmation before submission.
+2. Current student clarification: the instructor requests one main baseline; our main baseline is vanilla Whisper-Tiny. Validate any contradictory written Week 9 project-specific instructions before submission.
+3. Select a feasible **at-most-10-hour** licensed subset of Mozilla Common Voice Scripted Speech v27.0 (Swahili); target 8h train, 1h validation, 1h test, subject to speaker grouping. FLEURS remains a possible external test only.
 4. Confirm audio storage, GitHub size/LFS and lecturer's rule that **both raw and cleaned data must actually be inside the repository**. A download link or script alone does not satisfy that rule.
 5. Fix exact model IDs/revisions, training configuration, splits and metric normalization *before* reporting scores.
 
@@ -60,7 +76,7 @@ The manifest auditor checks empty transcripts, missing speaker IDs, missing audi
 
 ## Benchmark protocol (planned, not completed)
 - Reserve one **speaker-disjoint held-out test set**. Use validation only for tuning and checkpoint selection.
-- Baselines: run all required Week 9 vanilla systems, with training code for methods requiring training, on the same test split.
+- Main baseline: vanilla Whisper-Tiny inference; additional comparator: Swahili ASR-head-equipped wav2vec2-CTC pretrained inference; fine-tune Whisper-Tiny as the group's contribution. Re-check additional written course obligations if supplied.
 - Contribution: separately fine-tune an explicitly named pretrained ASR checkpoint; save the exact revision, seed, checkpoints, preprocessing version, training logs and predictions.
 - Primary: **WER** (word insertions + deletions + substitutions / reference word count). Secondary: **CER**, to complement WER on Swahili morphology. Record text-normalization rules identically for gold/reference and predictions, and save the per-utterance predictions.
 - Optional: inference latency and train-set-size ablation, properly standardized and labeled.
