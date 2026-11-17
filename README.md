@@ -7,9 +7,11 @@ Evaluate **automatic speech recognition (ASR)** for Swahili (`sw`) using a commo
 
 ## Role allocation and implementation handoff
 
-**Beyza Eser (completed initial responsibility):** GitHub repository architecture, overall project workflow, dataset source discovery and selection research, source/license feasibility documentation, and the initial acceptance criteria. **Beyza is NOT assigned to download, clean, upload, split or train on the dataset.** Starter scripts are scaffolding only and must be implemented/validated by the team members who take those tasks.
+**Beyza Eser — assigned work:** repository architecture, project workflow, Swahili dataset research **plus actual data acquisition, preparation/cleaning, preparation scripts, documented cleaning decisions, and committing original/processed dataset artifacts** under the instructor's rules. Architecture and initial dataset research are documented; actual data preparation **has not yet happened**. She does not own ASR model training or benchmark experiments. Speaker-disjoint split implementation/validation is a separate T2 card until team assignment.
 
-**To assign to other members:** acquisition and Git/LFS raw-audio upload; actual audio+transcript cleaning and cleaned-audio upload; speaker-disjoint splitting and leakage checks; required vanilla baselines; model fine-tuning; unified WER/CER benchmark; reporting and presentation. Owners are `UNASSIGNED` until agreed, not fictitious.
+**Whole-team final deliverables:** a technical PPTX presentation and a **finalized, verified README.md** with genuine results and runnable commands. These are mandatory work items, not automatic outputs of the initial scaffold.
+
+**To assign to other members:** speaker-disjoint split/leak tests, main baseline and additional comparator, fine-tuning, WER/CER benchmark, error analysis, and individual presentation sections. Final README review and slide integration are separate shared deliverables; exact owners remain to be assigned.
 
 **Start from [docs/TEAM_TASKS.md](docs/TEAM_TASKS.md)** for explicit inputs, steps, commands/acceptance tests, evidence and grading traps. Do not start fine-tuning until dataset and instructor-baseline gates pass.
 
@@ -66,7 +68,7 @@ python -m unittest discover -s tests -v
 ```
 This validates only **utilities**, not end-to-end model training.
 
-## Dataset pipeline (assigned to data engineering member, not Beyza; once legitimately obtained)
+## Dataset pipeline (Beyza's assigned dataset work; not completed yet)
 Place an allowed Common Voice `validated.tsv` subset in `data/raw/` and the referenced audio files in a matching clips directory. For a reproducible small demonstration:
 ```bash
 python src/audit_manifest.py --input data/raw/validated.tsv --audio-root data/raw/clips --output data/cleaned/validated_cleaned.tsv --log data/cleaned/cleaning_log.csv

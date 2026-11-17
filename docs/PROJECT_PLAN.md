@@ -1,7 +1,7 @@
 # Project plan — Swahili automatic speech recognition
 
-**Owner for initial architecture, workflow and dataset research:** Beyza Eser.
-**Role boundary:** Beyza's task is to identify/document/select a dataset candidate and organize the project. Downloading, actual cleaning, raw/cleaned repository upload, audio quality auditing and real-data splits belong to **other members (unassigned until agreed)**. The presence of starter utility scripts does not imply Beyza owns their full implementation.
+**Owner for architecture, workflow, dataset research and actual data preparation:** Beyza Eser. Initial architecture/research documented; real dataset processing pending.
+**Role boundary (updated):** Beyza owns dataset discovery, **download/selection, cleaning/preprocessing code and log, raw and processed audio+transcript artifact upload**, as well as repository architecture/project organization. These datasets/scripts are not yet completed. A separate team member should own speaker-disjoint splits/leakage QA (T2) and other members should own ASR baseline, training and evaluation. A final README audit and presentation are mandatory shared deliverables.
 **Detailed execution handoff:** `docs/TEAM_TASKS.md`; grade-based exit checks: `docs/GRADING_AUDIT.md`.
 **Current phase:** proposal / repository initialization. No training or collection completed.
 
@@ -20,7 +20,9 @@ Fine-tuning may improve transcription accuracy, but this is a testable hypothesi
 | 3. Baseline and comparator | One mandatory Whisper-Tiny main baseline + one optional wav2vec2-CTC pretrained comparator | Both inference runs evaluate on same held-out test split |
 | 4. Contribution | Reproducible training/fine-tuning script and checkpoint provenance | Separately identify original training contribution |
 | 5. Comparison | WER/CER CSV, per-utterance outputs, error analysis | Every number is regenerated from committed code |
-| 6. Submission | Per-person contribution histories, repo audit, PPTX | Public clean repo and on-time commits; slide timing checked |
+| 6. Final README | Updated commands, provenance, results, role attribution and complete file inventory | Each claim matches committed scripts/data; another member verifies reproduction |
+| 7. Presentation | Complete PPTX, technical model explanation, speaker contributions and rehearsal | Submitted deck, under instructor's time limit; no reading |
+| 8. Submission | Per-person contribution histories, final audit and PPTX | Public clean repo, full link and PPTX submitted on time |
 
 ## Agreed three-run experiment matrix
 
@@ -43,8 +45,8 @@ WER is the primary ASR task metric, not text-classification accuracy. CER helps 
 Crowdsourced transcript errors, text normalization bias, cross-split speaker leakage, dialect imbalance, near-duplicate utterances, dataset license restrictions, compute limitations, pretrained model exposure to data, and mismatch between Common Voice and external FLEURS domains.
 
 ## Ownership boundary
-Beyza: repository structure, methodology/project flow, source evaluation, dataset candidate selection/provenance documentation, and initial helper scaffolding (not implementation/validation of cleaning or dataset downloads).
-Other team members: dataset download/cleaning, actual audio/raw/cleaned uploads, real-world splitting/QA, model baselines, fine-tuning, evaluation and reproducibility; assign actual names only after agreement. Each member will create their **own** contribution file and commits. No contribution is attributed to another person at this stage.
+Beyza: repository structure, methodology/project flow, source evaluation and dataset selection; **real subset acquisition, cleaning and preprocessing scripts, cleaning logs, raw and cleaned corpus in GitHub** (assigned, not yet completed).
+Other team members: split generation/leakage checks, model baselines, fine-tuning and evaluations; final README and PPTX presentation are explicit shared tasks. Assign actual names only after agreement. Each member will create their **own** contribution file and commits. No contribution is attributed to another person at this stage.
 
 ## Before any training
 - Instructor requirement reported by student: one main baseline. Cross-check any contradictory Week 9 written instruction and confirm minimum usable dataset size.

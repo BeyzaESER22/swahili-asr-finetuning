@@ -19,6 +19,13 @@ This document is the **acceptance checklist**. It does not claim the instructor 
 | Actual cleaning, not reformatting | Verified real data problems, decisions, removal log, enough usable speech | NOT COMPLETED |
 | Public repo and deadline | Public incognito link, complete PPTX + GitHub URL, last commit before deadline | Public repo exists; submission pending |
 
+## Final documentation and slide quality checks
+
+- [ ] Assign a final README editor and an independent reviewer. Reconcile every file description, run command, model checkpoint and WER/CER number against committed artifacts.
+- [ ] Commit and submit `presentation/project3.pptx`; assign speakers, explain technical differences and rehearse the lecturer's presentation time constraint.
+- [ ] Reflect Beyza's updated ownership accurately: actual source dataset acquisition, cleaning code and data artifacts assigned, **not yet completed**.
+- [ ] Keep the final README and presentation tasks separate from model-training task completion.
+
 ## Critical quality gates
 - **G0:** One required baseline confirmed by the student; designated E1 vanilla Whisper-Tiny; user confirmed dataset uniqueness. Reconcile if newer written instructor instructions conflict.
 - **G1:** Dataset owner commits real raw and cleaned audio+metadata and measured cleaning evidence, **<=10h total audio (~8h train, ~1h val, ~1h test)**, with instructor minimum accepted.

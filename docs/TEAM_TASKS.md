@@ -13,23 +13,25 @@
 | Card | Owner (GitHub username) | Status | Required PR |
 | --- | --- | --- | --- |
 | T0 — Project architecture, flow, candidate dataset research | `BeyzaESER22` | INITIAL DOCUMENTATION DONE; language uniqueness/approval still pending | Initial setup commits |
-| T1 — Actual dataset acquisition, raw+cleaned assets and cleaning | UNASSIGNED | NOT STARTED | `data-acquisition-cleaning` |
+| T1 — Actual dataset acquisition, raw+cleaned assets and cleaning | `BeyzaESER22` | ASSIGNED; NOT STARTED | `data-acquisition-cleaning` |
 | T2 — Dataset QA / speaker-disjoint splits and leak tests | UNASSIGNED | NOT STARTED | `data-splits-quality` |
 | T3 — Whisper-Tiny main baseline + pretrained wav2vec2-CTC comparator | UNASSIGNED | NOT STARTED | `baseline-implementations` |
 | T4 — Fine-tuning/training contribution | UNASSIGNED | NOT STARTED | `whisper-finetuning` |
 | T5 — Unified metrics, benchmark, error analysis | UNASSIGNED | NOT STARTED | `benchmark-evaluation` |
-| T6 — Final repo audit and technical presentation | SHARED, each member owns own artifacts | NOT STARTED | `submission-audit` |
+| T6 — Final README verification and release-ready documentation | SHARED; final editor/reviewer TBD | NOT STARTED | `final-readme` |
+| T7 — Technical PPTX presentation, rehearsals and submission | SHARED; slide owner/presenter TBD | NOT STARTED | `presentation` |
+| T8 — Final repo audit, on-time submission | SHARED; prime submitter TBD | NOT STARTED | `submission-audit` |
 
 **Members must not claim completed work solely because files exist**. Every card is considered done only when its evidence and acceptance criteria below are met. Owner fields are intentionally empty.
 
-## T0 — Architecture + workflow + source research (Beyza Eser)
+## T0 — Architecture + workflow + source research (Beyza Eser; initial work documented)
 **Inputs:** instructor's repository/grading announcements; ASR/Week 9 announcement; official dataset catalog.
 **Outputs:** `README.md`, `docs/PROJECT_PLAN.md`, `docs/DATASET_RESEARCH.md`, `docs/TEAM_WORKFLOW.md`, `docs/BASELINE_REGISTRY.md`, `docs/TEAM_TASKS.md`, structure and contribution file.
 **Completed:** initial repo scaffold, workflow gates, Common Voice scripted speech v27.0 Swahili primary candidate with official catalog reference, FLEURS as optional secondary/external reference.
 **Pending coordination, not data-cleaning work:** dataset uniqueness confirmed by the user; confirm instructor minimum usable data size and review terms/Git LFS feasibility. Student reports one required baseline, chosen as Whisper-Tiny.
-**Boundary:** Beyza does **not** download, clean, split, upload or train data. Data utility source files are initial starter scaffolds handed to T1/T2.
+**Updated boundary:** Beyza **does** own acquiring/cleaning and uploading real data, plus preparation scripts. T1 is assigned to her but NOT COMPLETE. T2 (speaker-disjoint splits/leak QA), T3–T5 (model/benchmark) belong to other members when assigned. Current utility scripts are preliminary and need validation on real audio.
 
-## T1 — Dataset acquisition and real cleaning (future data engineering member)
+## T1 — Dataset acquisition and real cleaning (assigned to Beyza Eser; pending execution)
 **Inputs:** selected, versioned Common Voice Swahili `sw` dataset with source-approved real clip files, transcript TSV and `client_id`; Mozilla dataset terms; T0 research notes.
 **Steps:**
 1. Record the student's completed other-group overlap check; document source page, release number, license/terms, actual file hashes, original sample count, clip hours and speaker counts. Use trustworthy original reference transcripts only.
@@ -85,14 +87,38 @@
 **Outputs:** frozen scoring script, tests, machine-generated benchmark table, errors and sample audit.
 **Done only when:** new teammate can reproduce the final table from committed predictions and script.
 
-## T6 — Submission / presentation (all members)
+## T6 — Finalize README.md (shared; final editor and independent reviewer TBD)
+
+**Inputs:** completed T1–T5 PRs and reproducible experiment artifacts.
+**Steps:**
+1. Replace all scaffold-only descriptions and TODOs with the *actual* dataset version, clip hours, speaker/split counts, cleaning reasons, audio license and Git/LFS details.
+2. Explain every root file and directory, exact model architecture vs checkpoint IDs/revisions, training/evaluation entry points, pinned environment and seeds.
+3. Include a table automatically generated from committed results (WER/CER for E1, E2, E3). **Do not manually invent or transcribe scores from a notebook**; link a reproducible command and inputs.
+4. Document real caveats, negative results, resource costs, limitations and team contribution links; ensure install/run scripts work without manual cloud uploads.
+5. Ask a different team member to **clone and verify README commands end to end**, fix discrepancies and document the verification commit.
+**Output:** final `README.md` matching repository, `docs/GRADING_AUDIT.md` evidence, reviewer verification report / PR.
+**Done only when:** reviewer runs installation/tests/necessary experiment reproduction, and every link, output and file description is accurate.
+**Grading risk:** missing explanation of files or manually edited results costs correctness/rigor.
+
+## T7 — Prepare PPTX technical presentation (shared; owners TBD)
+**Inputs:** actual T1–T5 experiments and generated benchmark results, NOT forecasts or fabricated metrics.
+**Steps:**
+1. Prepare `presentation/project3.pptx` and commit it to GitHub; assign each member concrete slide and speaking responsibilities.
+2. Include dataset rationale and true cleaning examples; the 3 experiments (E1 Whisper-Tiny main vanilla baseline, E2 additional Wav2Vec2-CTC pretrained comparator, E3 fine-tuned Whisper-Tiny); frozen split; training loss; WER/CER and actual error examples.
+3. For technical depth, explain acoustic features/encoder/decoder, tokenizer, CTC vs autoregressive decoding and fine-tuning/backpropagation, plus fair benchmark details. Use real model IDs, revision info and measured results.
+4. Write concise presenter notes but **do not read** from the slides. Rehearse to the instructor's time limit; earlier announcement awards best pace below two minutes. Confirm per-speaker vs group interpretation.
+5. Rehearse Q&A on normalization, speaker leakage, why fine-tuning is the contribution, and why E2 is an extra pretrained comparator, not a new model.
+**Output:** committed editable PPTX, assigned speaking roles, rehearsal checklist and final presentation upload.
+**Done only when:** slide claims reconcile with `results/`, all speakers can explain their parts, timing is met, PPTX is submitted.
+**Grading risk:** copied/unexplained results, reading text, or exceeding time.
+
+## T8 — Submission audit (shared; prime submitter TBD)
 **Steps:**
 1. Each member creates `contributions/<NAME>_<STUDENT_ID>_<GITHUB_USERNAME>.md` with accurate, personally verifiable work and makes commits **from their own account**.
-2. Run all tests; pin every package version; record dataset/checkpoint revisions and seeds; make README explain every root file and folder.
-3. Ensure actual raw and cleaned data (not links/scripts), licenses, training scripts, baselines and result provenance have been committed **before** deadline. Check public URL in incognito.
-4. Upload PPTX and full `https://github.com/BeyzaESER22/swahili-asr-finetuning` link as assigned. Prime submitter submits once.
-5. Prepare to describe ASR pipeline, model architecture, fine-tuning, dataset cleaning, bias/leakage, metrics and result differences without reading. Instructor's earlier best pace is **under two minutes**; verify whether limit applies per speaker/group.
-**Done only when:** `docs/GRADING_AUDIT.md` is fully evidenced and the exact graded pre-deadline main commit is identified.
+2. Run all tests; pin every package version; record dataset/checkpoint revisions and seeds; make final README explain every root file and folder.
+3. Confirm real raw and cleaned data (not links/scripts), correct licenses, reproducible baseline/training results, and PR evidence have been committed **before the deadline**.
+4. Verify the GitHub repository is public in an incognito window; submit the full URL and PPTX on time through the required course platform. Prime submitter submits once.
+**Done only when:** the final `docs/GRADING_AUDIT.md` is evidenced and pre-deadline main commit SHA is recorded.
 
 ## How a contributor should proceed
 - Read *this card*, then the linked source files and README.

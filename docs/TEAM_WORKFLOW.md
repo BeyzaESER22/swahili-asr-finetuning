@@ -1,8 +1,8 @@
 # Collaboration, reproducibility and submission workflow
 
 ## Ownership and task handoff
-- Beyza Eser: initial architecture, project flow and dataset source research only; does **not** own data download, cleaning, upload, split generation, baseline training, fine-tuning or evaluation execution.
-- Dataset engineering, baselines, fine-tuning and evaluation must be assigned to actual individual members in `docs/TEAM_TASKS.md` and each member's own contribution file. There are no invented owner names.
+- Beyza Eser: project architecture, workflow and source research; **now also owns data download/selection, actual cleaning and preprocessing code, cleaning log, raw and processed data upload**. These data tasks are PENDING. She does not own ASR model training, baseline inference, benchmarking or separately assigned split/leak QA.
+- Speaker-disjoint split/QA, baselines, fine-tuning and evaluation must be assigned to actual individual members in `docs/TEAM_TASKS.md`. **Final README and PPTX technical presentation must be explicitly assigned and reviewed** before submission. There are no invented owner names.
 - Each implementation task has a definition of done and expected files. Read `docs/TEAM_TASKS.md` and `docs/GRADING_AUDIT.md` before starting.
 
 ## Git rules

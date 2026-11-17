@@ -1,10 +1,10 @@
 # Dataset research and selection — Swahili ASR
 
-Research notes prepared 2026-11-17 by Beyza Eser as the **dataset research/selection** deliverable. The downloading, cleaning, clip QA, splitting and upload work is explicitly delegated to the team's future data engineering owner (not Beyza). **Selection is provisional: no audio or transcript files have been downloaded to this repository.**
+Research notes prepared 2026-11-17 by Beyza Eser as the **dataset research/selection** deliverable. **Scope updated:** Beyza additionally owns downloading the selected subset, preprocessing/cleaning scripts, actual cleaning and original/processed audio+transcript upload. Those operations have **not been performed yet**. Speaker-disjoint split generation and overlap QA remain T2 for another member. **Selection is provisional: no audio or transcript files have been downloaded to this repository.**
 
 ## Confirmed group selection and corpus budget
 
-The student confirmed no other group chose the selected dataset. **Maximum selected usable audio: 10 hours total**, with ~8 hours for training, ~1 hour validation and ~1 hour test. Duration must be measured from real clips (not converted from number of rows). Speaker-disjoint selection may make split lengths approximate. Instructor minimum-hours/full-credit criteria remain unconfirmed. This dataset research is Beyza's responsibility; actual downloading and cleaning remain **assigned to other members**.
+The student confirmed no other group chose the selected dataset. **Maximum selected usable audio: 10 hours total**, with ~8 hours for training, ~1 hour validation and ~1 hour test. Duration must be measured from real clips (not converted from number of rows). Speaker-disjoint selection may make split lengths approximate. Instructor minimum-hours/full-credit criteria remain unconfirmed. Beyza is responsible for dataset research **and actual downloading, cleaning/code, and raw/cleaned uploads**; these remaining implementation tasks are not yet finished. Speaker-disjoint test allocation will be finalized by T2.
 
 ## Primary candidate: Mozilla Common Voice Scripted Speech v27.0 — Swahili
 - Locale: `sw` (Kiswahili); task: read-speech ASR; formats include MP3 clips and tabular metadata.

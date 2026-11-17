@@ -3,7 +3,7 @@
 - Student name: Beyza Eser
 - Student ID: 2309111064
 - GitHub account: `BeyzaESER22`
-- Project role: **Repository Architecture, Project Workflow, Dataset Research & Selection**
+- Project role: **Repository Architecture, Project Workflow, Dataset Research & Selection, and Dataset Acquisition/Preprocessing & Upload**
 
 ## Initial, attributable work (2026-11-17)
 - Planned and initialized the GitHub project layout to separate raw data, cleaned data, split manifests, reproducible scripts, configs, tests and results.
@@ -12,8 +12,11 @@
 - Defined the requirements and added initial *scaffolding* for data-manifest audit, speaker-disjoint splitting and WER/CER utility tests; these have not been executed on the actual dataset.
 - Documented team commit/PR practices and repository submission audit criteria based on instructor announcements.
 
-## Clear ownership boundary
-My responsibility is **finding and documenting a suitable dataset**, defining the repository structure and mapping project stages. I am **not responsible for collecting/downloading, cleaning, uploading or splitting real audio**, nor for model training or benchmark execution. Those tasks are separately assigned when the team agrees on owners.
+## Updated ownership: actual data work assigned but not yet done
+
+I own finding/documenting the dataset, repository architecture/workflow, **downloading the chosen real audio subset, preparing and cleaning it through documented code, maintaining the real cleaning log, and committing original and processed audio/transcripts**. These additional data processing/upload tasks are **planned / not yet completed**. The current placeholder data folders and starter audit script do NOT constitute a cleaned dataset.
+
+Another team member will take speaker-disjoint splitting/leakage QA (T2) after data preparation; model training, baseline implementation and benchmark execution are not my responsibility. The team will separately assign final README preparation and technical PPTX presentation.
 
 ## Attribution limitations
 Initial scaffold/code/docs were prepared with AI assistance, under my direction and review. Other students' code, datasets, experiments and results are **not** claimed as my work. Work is at the **planning / scaffold** stage; no download, training, speaker validation on real audio or verified experiment results have been performed.
