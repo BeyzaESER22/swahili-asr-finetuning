@@ -1,4 +1,5 @@
 # Initial data/metric utilities ONLY (Python 3.11); model training environment TBD.
 pandas==2.2.3
+numpy==2.1.3
 scikit-learn==1.5.2
 jiwer==3.0.4

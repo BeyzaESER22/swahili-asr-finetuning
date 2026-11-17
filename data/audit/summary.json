@@ -1,0 +1,119 @@
+{
+  "dataset": "Google FLEURS",
+  "configuration": "sw_ke",
+  "license": "CC BY 4.0",
+  "selection_seed": 42,
+  "selection_method": "official split preservation; deterministic whole-sentence-group sampling",
+  "speaker_policy": "Official train/dev/test boundaries are preserved. FLEURS documents these boundaries as speaker-disjoint; this TSV version does not expose speaker IDs, so speaker counts and an independent ID-level proof are unavailable.",
+  "cleaning_policy": "Reject structural, metadata/WAV-format, sample-count, >30 s, nonfinite, or zero-energy failures. Keep waveform bytes unchanged; log high-silence/high-clipping clips for review.",
+  "source_files": {
+    "train.tsv": {
+      "bytes": 1734767,
+      "sha256": "4652daed5376e233b274fca6bdd3f28416bb2d619b01a58da2045583663f5e80"
+    },
+    "train.tar": {
+      "bytes": 3106560000,
+      "sha256": "fc39e611385e6efffac031697a163d48f1a5d03348e586ab92ecf9e6c21f1c76"
+    },
+    "dev.tsv": {
+      "bytes": 116122,
+      "sha256": "97db8ed1e1df72a5bca34ea2b3dd1174cd45b7b57978ce6691851915b1f2cc4a"
+    },
+    "dev.tar": {
+      "bytes": 184913920,
+      "sha256": "b00f674a993c293609f24daada237ee3a15b564d28d2485bda3351da00270077"
+    },
+    "test.tsv": {
+      "bytes": 276161,
+      "sha256": "74218f52a1f930dcf92cba7367e87cba753b47bc0661c05e22b5e631b4c9cf6c"
+    },
+    "test.tar": {
+      "bytes": 444579840,
+      "sha256": "092c9603afef1d55e454d97eba5339e6c9ba2e517de6015e76800e8ec48777f8"
+    }
+  },
+  "splits": {
+    "train": {
+      "source_split": "train",
+      "source_rows": 3070,
+      "accepted_rows": 2998,
+      "review_rows": 0,
+      "rejected_rows": 72,
+      "source_hours": 13.47105,
+      "selected_rows": 1902,
+      "selected_sentence_ids": 918,
+      "selected_hours": 7.9993,
+      "target_hours": 8.0,
+      "selected_gender_rows": {
+        "FEMALE": 1023,
+        "MALE": 879
+      }
+    },
+    "validation": {
+      "source_split": "dev",
+      "source_rows": 211,
+      "accepted_rows": 210,
+      "review_rows": 0,
+      "rejected_rows": 1,
+      "source_hours": 0.801683333,
+      "selected_rows": 210,
+      "selected_sentence_ids": 133,
+      "selected_hours": 0.7899,
+      "target_hours": 1.0,
+      "selected_gender_rows": {
+        "FEMALE": 59,
+        "MALE": 151
+      }
+    },
+    "test": {
+      "source_split": "test",
+      "source_rows": 487,
+      "accepted_rows": 487,
+      "review_rows": 0,
+      "rejected_rows": 0,
+      "source_hours": 1.927616667,
+      "selected_rows": 252,
+      "selected_sentence_ids": 162,
+      "selected_hours": 0.997716667,
+      "target_hours": 1.0,
+      "selected_gender_rows": {
+        "FEMALE": 68,
+        "MALE": 184
+      }
+    }
+  },
+  "totals": {
+    "source_rows": 3768,
+    "source_hours": 16.20035,
+    "selected_rows": 2364,
+    "selected_hours": 9.786916667,
+    "rejected_rows": 73,
+    "review_rows": 0
+  },
+  "cross_split_overlap": {
+    "train_vs_dev": {
+      "filenames": 0,
+      "sentence_ids": 0,
+      "normalized_transcripts": 0,
+      "audio_sha256": 0
+    },
+    "train_vs_test": {
+      "filenames": 0,
+      "sentence_ids": 0,
+      "normalized_transcripts": 0,
+      "audio_sha256": 0
+    },
+    "dev_vs_test": {
+      "filenames": 0,
+      "sentence_ids": 0,
+      "normalized_transcripts": 0,
+      "audio_sha256": 0
+    }
+  },
+  "limitations": [
+    "No listening-based intelligibility or language-ID review was performed.",
+    "No transcript was corrected and no model-generated transcript was treated as ground truth.",
+    "Silence/clipping thresholds are review flags, not automatic rejection rules.",
+    "The first TSV field is a sentence ID, not a speaker ID."
+  ]
+}

@@ -1,3 +1,7 @@
-# Cleaned dataset — NOT GENERATED
+# Cleaned selected dataset
 
-No cleaned dataset currently exists. Once the raw dataset is available, run actual cleaning with an auditable log, retain accepted **audio and transcripts**, and commit the required artifacts under an instructor-approved Git/LFS plan. The starter audit utility only filters metadata and checks paths; it does not clean audio waveforms.
+`manifest.tsv` is the audited, frozen 9.786916667-hour selection and
+`cleaning_log.tsv` records the 73 duration exclusions. Audio under `audio/` is
+byte-identical to raw audio: this pipeline performs validation and selection,
+not denoising or transcript rewriting. The absence of listening-based review is
+an explicit remaining limitation, not a completed check.

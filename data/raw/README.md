@@ -1,3 +1,7 @@
-# Raw dataset — NOT DOWNLOADED
+# Raw selected dataset
 
-This folder contains no Swahili audio or transcripts yet. Do not claim data novelty or raw-data submission compliance. Place legitimately obtained versioned original source audio and metadata here after checking source terms, GitHub/LFS feasibility and course requirements. Preserve original files and SHA256 checksums.
+`manifest.tsv` contains the 2,364 selected FLEURS `sw_ke` source rows. The
+corresponding original, unmodified WAVs are under `audio/{train,validation,test}`
+after running the documented command with `--extract-audio`. See
+`../audit/summary.json` for the six downloaded source-file checksums. The full
+3.5 GB source archives are intentionally not duplicated in this repository.

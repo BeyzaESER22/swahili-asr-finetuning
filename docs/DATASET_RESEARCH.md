@@ -1,55 +1,112 @@
-# Dataset research and selection — Swahili ASR
+# Dataset decision and verified preparation — FLEURS `sw_ke`
 
-Research notes prepared 2026-11-17 by Beyza Eser as the **dataset research/selection** deliverable. **Scope updated:** Beyza additionally owns downloading the selected subset, preprocessing/cleaning scripts, actual cleaning and original/processed audio+transcript upload. Those operations have **not been performed yet**. Speaker-disjoint split generation and overlap QA remain T2 for another member. **Selection is provisional: no audio or transcript files have been downloaded to this repository.**
+Updated 2026-11-17 from the actual files under `/Users/beyza/Desktop/Audio`.
+This document separates measured evidence from source documentation and from
+remaining limitations.
 
-## Confirmed group selection and corpus budget
+## Final dataset decision
 
-The student confirmed no other group chose the selected dataset. **Maximum selected usable audio: 10 hours total**, with ~8 hours for training, ~1 hour validation and ~1 hour test. Duration must be measured from real clips (not converted from number of rows). Speaker-disjoint selection may make split lengths approximate. Instructor minimum-hours/full-credit criteria remain unconfirmed. Beyza is responsible for dataset research **and actual downloading, cleaning/code, and raw/cleaned uploads**; these remaining implementation tasks are not yet finished. Speaker-disjoint test allocation will be finalized by T2.
+- Dataset: Google FLEURS, Swahili–Kenya configuration `sw_ke`.
+- Source card: <https://huggingface.co/datasets/google/fleurs>.
+- Paper: <https://arxiv.org/abs/2205.12446>.
+- Data license: CC BY 4.0; repository attribution/change notice:
+  `data/LICENSE.md`.
+- Project cap: at most ten total selected hours; target approximately 8/1/1.
+- Selection: seed 42, preserve official split boundaries, select complete
+  sentence-ID groups in deterministic hash order without exceeding each cap.
 
-## Primary candidate: Mozilla Common Voice Scripted Speech v27.0 — Swahili
-- Locale: `sw` (Kiswahili); task: read-speech ASR; formats include MP3 clips and tabular metadata.
-- Official dataset catalog identifies **CC0-1.0** and **20.89 GB** for the full Swahili package. This is the *published archive size*, not the target training subset.
-- Source: https://commonvoice.mozilla.org/en/datasets
-- Release announcement (2026-09-18): https://discourse.mozilla.org/t/common-voice-scripted-speech-v27-0-and-spontaneous-speech-v5-0-released/149490
-- Dataset version and archive hash must be recorded after download. Use only validated reference transcripts and verify the data source's acceptable-use terms.
-- Example Common Voice metadata may include `path`, `sentence` and `client_id`, plus accent/locale fields. Inspect the actual downloaded schema rather than relying on assumptions.
-- Speaker-disjoint evaluation requires nonempty `client_id`; exclude or separately review missing IDs.
+Common Voice was considered earlier but is not the selected dataset. Documents
+and configs must not describe it as the primary corpus.
 
-### Why this is the leading option
-A non-English language, transcribed speech, a well-documented source, opportunity for meaningful audio/transcript integrity checks, and sufficient *potential* material for a nontrivial cleaned subset. **No low-resource or novelty bonus is guaranteed.** Swahili may be regarded as better-resourced than some alternatives.
+## Measured source evidence
 
-### Practical blocker
-The full package is not appropriate for ordinary Git objects. The lecturer explicitly requires raw **and** cleaned data to be present in the submitted repository. Verify whether a **meaningful, licensed small subset with actual audio** can be placed under `data/raw/` and `data/cleaned/` and whether Git LFS storage/bandwidth is accepted; neither a Google Drive link nor a download-only script suffices. Do not upload until terms, disk quota and instructor acceptance are confirmed. Use a representative, speaker-disjoint subset; avoid cherry-picking easy clips.
+| Source split | Clips | Real WAV duration |
+| --- | ---: | ---: |
+| train | 3,070 | 13.471050 h |
+| dev | 211 | 0.801683333 h |
+| test | 487 | 1.927616667 h |
+| **total** | **3,768** | **16.200350 h** |
 
-## Secondary candidate: Google FLEURS (Swahili Kenya)
-- Source: https://huggingface.co/datasets/google/fleurs
-- Config typically `sw_ke`; verify exact revision, configuration, split counts and licensing **from the authoritative card before actual usage**.
-- Suitable potential external-domain evaluation set; do not mix with Common Voice training without a documented reason, license confirmation and group dataset-novelty check.
-- FLEURS results must be labeled **out-of-domain**, not quietly merged into the same test benchmark.
+The preparation script opened every WAV payload, rather than inferring duration
+from file size or clip count. For every file it checked RIFF structure, IEEE
+Float32 encoding, mono channel count, 16 kHz sample rate, finite samples,
+nonzero energy and equality between actual frame count and TSV `num_samples`.
+It also computed peak, RMS, silence ratio, clipping ratio and per-WAV SHA-256.
+All files passed those structural checks.
 
-## Proposed cleaning audit
-1. Verify archive version, original TSV columns, source split and SHA256.
-2. Reject empty reference, missing clip, missing speaker identifier, duplicate clip path and duplicate exact path+reference.
-3. Check duration, sample rate, clipping/silence, inaudible/corrupt clips, wrong-language and transcript/audio alignment **with actual implemented validation**.
-4. Log for each exclusion: original identifier, specific reason, and source. Do not invent corrections or reference words.
-5. Save original and cleaned **audio plus metadata**, not only manifest. Record accepted/rejected duration and speaker statistics.
-6. Freeze speaker-disjoint train/val/test manifests with checks for duplicate audio or repeated content across splits.
-7. Preserve immutable original references; define text normalization centrally for both hypotheses and references.
+The audit found 73 recordings longer than 30 seconds: 72 train and one dev.
+They were excluded from the eligible pool and remain visible in
+`data/cleaned/cleaning_log.tsv`. No clip crossed the configured 98% silence or
+1% clipping review thresholds. This is waveform evidence, not proof that every
+utterance is intelligible, correctly labeled or linguistically aligned.
 
-The current `src/audit_manifest.py` is a **limited metadata/path audit only**; it does **not** implement waveform/audio quality checks or create cleaned audio files. The additional stages above are requirements, not completed work.
+All six original source hashes, byte sizes and exact results are machine-written
+to `data/audit/summary.json`; per-record evidence is in
+`data/audit/full_audit.tsv`.
 
-## Dataset decision record
-| Decision | Value |
-| --- | --- |
-| Primary dataset | Common Voice Scripted Speech v27.0 Swahili (candidate) |
-| Language availability confirmed with classmates | YES — user confirmed no overlap |
-| Training dataset uniqueness confirmed | YES — user confirmed no overlap |
-| Source archive downloaded and hashed | NO |
-| Dataset terms individually reviewed before sharing | PENDING |
-| Selected dataset target / Git LFS | <=10 total hours targeted; Git LFS compliance PENDING |
-| Audio quality audit and actual cleaned files | NOT STARTED |
-| Speaker-disjoint splits validated on real data | NOT STARTED |
-| Instructor baseline and dataset-size rules | PENDING |
+## Frozen maximum-10-hour subset
 
-## Source ethics
-Avoid speaker re-identification. Do not use model predictions as gold transcripts. Correct suspect transcripts only when supported by a trustworthy original/source or documented human verification protocol.
+| Model split | Source boundary | Clips | Sentence IDs | Duration |
+| --- | --- | ---: | ---: | ---: |
+| train | train | 1,902 | 918 | 7.999300 h |
+| validation | dev | 210 | 133 | 0.789900 h |
+| test | test | 252 | 162 | 0.997716667 h |
+| **total** |  | **2,364** |  | **9.786916667 h** |
+
+Validation is below one hour because the single >30-second dev file is rejected
+and the complete eligible dev split totals 0.7899 h. The selection does not
+fill the unused budget with test material, because doing so would distort the
+agreed 8/1/1 intent. The total remains safely below ten hours.
+
+## Speaker evidence: important limitation
+
+The first source TSV field is a sentence/prompt ID, not a speaker ID; repeated
+values have identical transcripts recorded by different voices. The current
+seven-field TSV therefore cannot support a speaker count or an independent
+speaker-ID intersection test. The FLEURS paper states that the official
+train/dev/test sets use disjoint speakers. This preparation preserves those
+boundaries exactly and only subsamples within each boundary.
+
+Confirmed source claim: official boundaries are speaker-disjoint. Independently
+verified repository claim: no audio filename or normalized transcript crosses
+the three source splits. Unavailable proof: direct speaker-ID comparison.
+These claims must not be conflated.
+
+## Cleaning and preprocessing scope
+
+Implemented:
+
+- literal seven-field TSV parsing without CSV quote corruption;
+- full tar-to-TSV membership and duplicate-filename audit;
+- full WAV/header/frame/signal inspection and SHA-256;
+- auditable rejection and review reasons;
+- deterministic duration-capped manifests;
+- selected raw audio extraction and byte-identical cleaned audio tree;
+- Git LFS tracking, CC BY attribution, tests and reproducible CLI.
+
+Not implemented or claimed:
+
+- listening to all 3,768 recordings;
+- automatic or human language identification;
+- human transcript correction/alignment review;
+- denoising, silence trimming or resampling;
+- independent speaker-ID proof or speaker counts.
+
+No model prediction is used as reference text. Duplicated normalized text within
+a split is expected because FLEURS collects multiple readings of a prompt; it
+is not blindly removed as duplicate audio.
+
+## GitHub/LFS assessment
+
+GitHub blocks ordinary Git objects over 100 MiB and recommends Git LFS for
+binary data. GitHub Free and Pro currently include 10 GiB LFS storage and
+10 GiB monthly bandwidth; the selected unique audio occupies about 2.1 GiB
+locally. Raw and cleaned paths have identical content hashes, so LFS content
+addressing should not store duplicate waveform objects. Each WAV is below the
+plan's per-file limit.
+
+The size and license are therefore technically compatible with Git LFS, subject
+to the repository owner's *remaining* quota and budget settings. The current
+Codex environment has no usable GitHub Git credential, so remote upload is not
+confirmed. Do not claim that the data is on GitHub until `git push` and `git lfs
+push` succeed and a fresh clone retrieves real WAVs rather than only pointers.

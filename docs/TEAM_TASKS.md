@@ -13,8 +13,8 @@
 | Card | Owner (GitHub username) | Status | Required PR |
 | --- | --- | --- | --- |
 | T0 — Project architecture, flow, candidate dataset research | `BeyzaESER22` | INITIAL DOCUMENTATION DONE; language uniqueness/approval still pending | Initial setup commits |
-| T1 — Actual dataset acquisition, raw+cleaned assets and cleaning | `BeyzaESER22` | ASSIGNED; NOT STARTED | `data-acquisition-cleaning` |
-| T2 — Dataset QA / speaker-disjoint splits and leak tests | UNASSIGNED | NOT STARTED | `data-splits-quality` |
+| T1 — Actual dataset acquisition, raw+cleaned assets and cleaning | `BeyzaESER22` | PREPARED AND COMMITTED LOCALLY; REMOTE LFS PUSH PENDING | `data-acquisition-cleaning` |
+| T2 — Dataset QA / official-boundary and leak tests | UNASSIGNED | NOT STARTED | `data-splits-quality` |
 | T3 — Whisper-Tiny main baseline + pretrained wav2vec2-CTC comparator | UNASSIGNED | NOT STARTED | `baseline-implementations` |
 | T4 — Fine-tuning/training contribution | UNASSIGNED | NOT STARTED | `whisper-finetuning` |
 | T5 — Unified metrics, benchmark, error analysis | UNASSIGNED | NOT STARTED | `benchmark-evaluation` |
@@ -27,30 +27,30 @@
 ## T0 — Architecture + workflow + source research (Beyza Eser; initial work documented)
 **Inputs:** instructor's repository/grading announcements; ASR/Week 9 announcement; official dataset catalog.
 **Outputs:** `README.md`, `docs/PROJECT_PLAN.md`, `docs/DATASET_RESEARCH.md`, `docs/TEAM_WORKFLOW.md`, `docs/BASELINE_REGISTRY.md`, `docs/TEAM_TASKS.md`, structure and contribution file.
-**Completed:** initial repo scaffold, workflow gates, Common Voice scripted speech v27.0 Swahili primary candidate with official catalog reference, FLEURS as optional secondary/external reference.
+**Completed:** initial repo scaffold, workflow gates and final FLEURS `sw_ke` selection with source/license references.
 **Pending coordination, not data-cleaning work:** dataset uniqueness confirmed by the user; confirm instructor minimum usable data size and review terms/Git LFS feasibility. Student reports one required baseline, chosen as Whisper-Tiny.
-**Updated boundary:** Beyza **does** own acquiring/cleaning and uploading real data, plus preparation scripts. T1 is assigned to her but NOT COMPLETE. T2 (speaker-disjoint splits/leak QA), T3–T5 (model/benchmark) belong to other members when assigned. Current utility scripts are preliminary and need validation on real audio.
+**Updated boundary:** Beyza owns acquiring/cleaning and uploading real data plus preparation scripts. The full local preparation ran on real audio; T1 remains remotely incomplete only until the LFS objects are authenticated, pushed and fresh-clone verified. T2 independent QA and T3–T5 model/benchmark work belong to other members.
 
-## T1 — Dataset acquisition and real cleaning (assigned to Beyza Eser; pending execution)
-**Inputs:** selected, versioned Common Voice Swahili `sw` dataset with source-approved real clip files, transcript TSV and `client_id`; Mozilla dataset terms; T0 research notes.
+## T1 — Dataset acquisition and real cleaning (assigned to Beyza Eser; locally prepared)
+**Inputs:** Google FLEURS `sw_ke` train/dev/test WAV archives and seven-field TSVs; FLEURS CC BY 4.0 terms; T0 research notes.
 **Steps:**
-1. Record the student's completed other-group overlap check; document source page, release number, license/terms, actual file hashes, original sample count, clip hours and speaker counts. Use trustworthy original reference transcripts only.
+1. Record the student's completed other-group overlap check; document source page, license/terms, actual file hashes, original sample count and clip hours. Speaker counts are unavailable because this TSV release omits speaker IDs. Use trustworthy original reference transcripts only.
 2. Obtain a representative subset with **no more than 10h of total usable audio**, reserving roughly 8h training, 1h validation, 1h test; instructor must clarify if this is too small for full credit. Avoid cherry-picking only short/easy clips. Measure duration from actual recordings and record sampling code, seed and selection IDs.
 3. Preserve **actual original audio + original metadata** under `data/raw/`. Agree on Git LFS constraints before uploading. A Google Drive URL, ignored folder or download-only script **does not satisfy** the instructor's repo rule.
-4. Extend `src/audit_manifest.py` beyond basic path/metadata checks: detect duplicate recordings, missing/corrupt audio, empty or misaligned references, abnormal durations/sample rates, clipping/silence/unintelligible segments; do not claim to have checked what the script does not implement.
-5. Document **real fixes/removals**, not just file reformatting. Maintain `data/cleaned/cleaning_log.csv` with clip ID, issue, decision, reason and counts before/after. Never fabricate/correct text on model say-so. Retain **actual cleaned audio + aligned transcripts** in `data/cleaned/`.
-6. Ensure `src/prepare_data.py` or documented commands reproduce raw -> cleaned outputs without manual Colab uploads. Add tests for key failure cases and demonstrate on the real subset.
-**Outputs:** real `data/raw/` assets, `data/cleaned/` assets, cleaning script, cleaning log, provenance report, hashes, measured accepted hours/speakers; updated READMEs.
-**Done only when:** team can reproduce the cleaning output from **committed raw data** and report exact genuine removals. No raw/cleaned data has been supplied at scaffold stage.
+4. Use `src/prepare_fleurs.py` for the full metadata/WAV audit, duration cap and extraction. It checks structural/format/sample-count/signal conditions and logs clipping/silence review thresholds; it does not claim listening-based intelligibility review.
+5. Document real exclusions in `data/cleaned/cleaning_log.tsv`. Never fabricate/correct text on model say-so. Retain actual cleaned audio + aligned transcripts in `data/cleaned/`.
+6. Reproduce raw -> cleaned outputs without manual Colab uploads and run the test suite.
+**Outputs:** real `data/raw/` assets, `data/cleaned/` assets, cleaning script/log, provenance report, hashes and measured accepted hours; updated READMEs.
+**Done only when:** the LFS commit is pushed and a fresh clone retrieves the real WAVs. Local preparation and commit are complete; remote verification remains pending.
 **Grading risk:** Data Novelty 0 if another group uses identical training dataset; large deductions if raw/cleaned absent or 'cleaning' is only converting file formats.
 
 ## T2 — Split and quality/contamination checks (future data engineer)
-**Inputs:** cleaned audio + reference transcript + stable speaker IDs from T1.
+**Inputs:** cleaned audio, reference transcripts, official split-boundary provenance and T1 audit evidence. Stable speaker IDs are unavailable in this TSV release.
 **Steps:**
-1. Complete and test `src/split_manifest.py`; adapt official split policy and GroupShuffleSplit as needed. **Target ~8h train/~1h validation/~1h test**, not necessarily exactly 80/10/10 by row count. Split by real audio duration while enforcing disjoint speakers and <=10h total. The starter only groups by speaker and currently DOES NOT enforce duration targets or the 10h ceiling; extend it before claiming this is done.
-2. Freeze train/validation/test file manifests, speaker sets and checksums; prove zero shared `client_id` and zero reused clip IDs across splits.
+1. Independently rerun `src/prepare_fleurs.py` and confirm the 7.999300/0.789900/0.997716667-hour manifests and <=10h ceiling. Do not use the generic `src/split_manifest.py` for FLEURS because it requires unavailable `client_id` values.
+2. Verify zero reused filenames and zero normalized-transcript overlap across official boundaries; review FLEURS paper evidence for speaker-disjoint source splits. Explicitly record that direct speaker-ID proof is unavailable.
 3. Check near-duplicate audio/text leakage across splits; duplicated transcripts *alone* may be legitimate ASR readings, so review rather than blindly removing.
-4. Ensure all baselines and fine-tuned models use **identical test IDs** and frozen reference transcript version. Record sample/hours/speaker counts for every split.
+4. Ensure all baselines and fine-tuned models use identical test IDs and frozen reference transcript version. Record clip/hour counts and the speaker-ID limitation for every split.
 **Outputs:** `data/splits/{train,validation,test}.tsv`, split configuration/seed, test proofs, duplicate/leak report, README commands.
 **Done only when:** assertions pass on actual corpus, train/test leak audit is recorded and split files are committed.
 
