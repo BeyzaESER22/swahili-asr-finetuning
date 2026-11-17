@@ -1,0 +1,14 @@
+{
+  "status": "PROPOSAL_ONLY",
+  "seed": 42,
+  "language": "sw",
+  "primary_dataset": "Mozilla Common Voice Scripted Speech 27.0 Swahili (candidate)",
+  "test_protocol": "speaker-disjoint",
+  "primary_metric": "WER",
+  "secondary_metric": "CER",
+  "model_checkpoint": null,
+  "model_revision": null,
+  "mandatory_baseline_list_verified": false,
+  "dataset_uniqueness_confirmed": false,
+  "data_in_repo_confirmed": false
+}

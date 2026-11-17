@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.DS_Store
+*.log
+# Do not put untracked data/checkpoints behind a silent ignore.
+# Before adding large datasets, agree on Git LFS + lecturer requirements.
