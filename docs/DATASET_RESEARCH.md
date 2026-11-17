@@ -1,6 +1,6 @@
 # Dataset research and selection — Swahili ASR
 
-Research notes prepared 2026-11-17. **Selection is provisional: no audio or transcript files have been downloaded to this repository.**
+Research notes prepared 2026-11-17 by Beyza Eser as the **dataset research/selection** deliverable. The downloading, cleaning, clip QA, splitting and upload work is explicitly delegated to the team's future data engineering owner (not Beyza). **Selection is provisional: no audio or transcript files have been downloaded to this repository.**
 
 ## Primary candidate: Mozilla Common Voice Scripted Speech v27.0 — Swahili
 - Locale: `sw` (Kiswahili); task: read-speech ASR; formats include MP3 clips and tabular metadata.

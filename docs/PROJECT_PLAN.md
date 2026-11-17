@@ -1,6 +1,8 @@
 # Project plan — Swahili automatic speech recognition
 
 **Owner for initial architecture, workflow and dataset research:** Beyza Eser.
+**Role boundary:** Beyza's task is to identify/document/select a dataset candidate and organize the project. Downloading, actual cleaning, raw/cleaned repository upload, audio quality auditing and real-data splits belong to **other members (unassigned until agreed)**. The presence of starter utility scripts does not imply Beyza owns their full implementation.
+**Detailed execution handoff:** `docs/TEAM_TASKS.md`; grade-based exit checks: `docs/GRADING_AUDIT.md`.
 **Current phase:** proposal / repository initialization. No training or collection completed.
 
 ## Scientific question
@@ -37,8 +39,8 @@ WER is the primary ASR task metric, not text-classification accuracy. CER helps 
 Crowdsourced transcript errors, text normalization bias, cross-split speaker leakage, dialect imbalance, near-duplicate utterances, dataset license restrictions, compute limitations, pretrained model exposure to data, and mismatch between Common Voice and external FLEURS domains.
 
 ## Ownership boundary
-Beyza: repository structure, methodology/project flow, source evaluation, dataset selection/provenance and initial audit/split utilities.
-Other team members: assign only after actual agreement. Each member will create their **own** contribution file and commits. No contribution is attributed to another person at this stage.
+Beyza: repository structure, methodology/project flow, source evaluation, dataset candidate selection/provenance documentation, and initial helper scaffolding (not implementation/validation of cleaning or dataset downloads).
+Other team members: dataset download/cleaning, actual audio/raw/cleaned uploads, real-world splitting/QA, model baselines, fine-tuning, evaluation and reproducibility; assign actual names only after agreement. Each member will create their **own** contribution file and commits. No contribution is attributed to another person at this stage.
 
 ## Before any training
 - Obtain instructor's exhaustive Week 9 baseline list and minimum usable dataset size.

@@ -5,6 +5,14 @@
 ## Project objective
 Evaluate **automatic speech recognition (ASR)** for Swahili (`sw`) using a common, held-out, trustworthy transcription test set. Compare instructor-required **vanilla baselines** against separately trained/fine-tuned models. The proposed contribution is supervised fine-tuning of a specific pretrained multilingual ASR checkpoint, contingent on the Week 9 baseline list and available compute.
 
+## Role allocation and implementation handoff
+
+**Beyza Eser (completed initial responsibility):** GitHub repository architecture, overall project workflow, dataset source discovery and selection research, source/license feasibility documentation, and the initial acceptance criteria. **Beyza is NOT assigned to download, clean, upload, split or train on the dataset.** Starter scripts are scaffolding only and must be implemented/validated by the team members who take those tasks.
+
+**To assign to other members:** acquisition and Git/LFS raw-audio upload; actual audio+transcript cleaning and cleaned-audio upload; speaker-disjoint splitting and leakage checks; required vanilla baselines; model fine-tuning; unified WER/CER benchmark; reporting and presentation. Owners are `UNASSIGNED` until agreed, not fictitious.
+
+**Start from [docs/TEAM_TASKS.md](docs/TEAM_TASKS.md)** for explicit inputs, steps, commands/acceptance tests, evidence and grading traps. Do not start fine-tuning until dataset and instructor-baseline gates pass.
+
 ## Critical decisions (not yet approved)
 1. Confirm Swahili language and *training dataset* do not overlap any other group's choices. Coordinate before training.
 2. Confirm the instructor's exhaustive Project 3 / Week 9 **mandatory baseline list**. This repository does not treat the proposed models as the complete required list.
@@ -18,6 +26,8 @@ Evaluate **automatic speech recognition (ASR)** for Swahili (`sw`) using a commo
 | `docs/PROJECT_PLAN.md` | Research questions, stages, acceptance gates, schedule and ownership |
 | `docs/DATASET_RESEARCH.md` | Source evidence, license, access, selection criteria, feasibility |
 | `docs/TEAM_WORKFLOW.md` | Git and contribution requirements, definition of done |
+| `docs/TEAM_TASKS.md` | Detailed member-facing implementation tasks and acceptance gates |
+| `docs/GRADING_AUDIT.md` | Instructor announcement mapped to submission evidence |
 | `docs/BASELINE_REGISTRY.md` | Instructor baseline checklist and proposed experiments |
 | `contributions/` | One correctly named file per member; currently only Beyza's verified work |
 | `data/raw/` | Original audio/TSV subset once acquired (currently only README) |
@@ -40,7 +50,7 @@ python -m unittest discover -s tests -v
 ```
 This validates only **utilities**, not end-to-end model training.
 
-## Dataset pipeline (once legitimately obtained)
+## Dataset pipeline (assigned to data engineering member, not Beyza; once legitimately obtained)
 Place an allowed Common Voice `validated.tsv` subset in `data/raw/` and the referenced audio files in a matching clips directory. For a reproducible small demonstration:
 ```bash
 python src/audit_manifest.py --input data/raw/validated.tsv --audio-root data/raw/clips --output data/cleaned/validated_cleaned.tsv --log data/cleaned/cleaning_log.csv

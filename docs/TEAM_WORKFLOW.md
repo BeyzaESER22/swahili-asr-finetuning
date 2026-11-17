@@ -1,5 +1,10 @@
 # Collaboration, reproducibility and submission workflow
 
+## Ownership and task handoff
+- Beyza Eser: initial architecture, project flow and dataset source research only; does **not** own data download, cleaning, upload, split generation, baseline training, fine-tuning or evaluation execution.
+- Dataset engineering, baselines, fine-tuning and evaluation must be assigned to actual individual members in `docs/TEAM_TASKS.md` and each member's own contribution file. There are no invented owner names.
+- Each implementation task has a definition of done and expected files. Read `docs/TEAM_TASKS.md` and `docs/GRADING_AUDIT.md` before starting.
+
 ## Git rules
 1. Every student clones the **public** GitHub repository using their **own account**, creates a feature branch, makes substantive commits themselves and opens a pull request. Do not push the whole team's work under one person's identity.
 2. Every actual member creates their own `contributions/FIRST_LAST_STUDENTID_GITHUBUSERNAME.md` (not `contributors/`). Describe actual file paths, experiments, code and linked commit/PR evidence.
