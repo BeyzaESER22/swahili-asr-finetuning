@@ -52,6 +52,7 @@ All three runs must use the **same frozen test utterances**, transcription norma
 | `data/cleaned/` | Actual cleaned audio/metadata generated from raw, not claimed yet |
 | `data/splits/` | Speaker-disjoint train/validation/test manifests when produced |
 | `src/prepare_fleurs.py` | Audits every FLEURS TSV/WAV, measures duration/quality, selects <=10h and extracts raw/cleaned audio |
+| `src/verify_splits.py` | T2: independent QA of the frozen FLEURS splits (boundaries, overlap, counts/hours, audio hashes) -> `data/splits/qa_report.json` |
 | `src/audit_manifest.py` | Earlier generic Common Voice-like metadata-only utility; not the FLEURS evidence source |
 | `src/split_manifest.py` | Speaker-group-disjoint train/validation/test split utility |
 | `src/metrics.py` | Explicit WER/CER scoring and reference normalization |
@@ -75,6 +76,14 @@ Place the six original FLEURS `sw_ke` files (`train/dev/test.tsv` and `.tar`) in
 python src/prepare_fleurs.py --input-dir /path/to/FLEURS-sw_ke-source-files --output-root data --seed 42 --extract-audio
 ```
 The pipeline checks literal seven-field TSV structure; tar membership; RIFF/IEEE-Float32, mono and 16 kHz format; frame-count agreement; nonfinite/zero-energy audio; >30-second clips; and clipping/silence review thresholds. It hashes every source archive and WAV. It does **not** correct reference transcripts, denoise waveforms, or replace listening-based intelligibility/language review. The source TSV has no speaker IDs, so official speaker-disjoint split boundaries are preserved instead of claiming a newly generated speaker split.
+
+## T2 — Independent split QA (Meltem)
+```bash
+python src/verify_splits.py                                  # metadata checks H1-H7
+git lfs pull                                                 # download the real WAVs (~2.3 GB)
+python src/verify_splits.py --audio-dir data/cleaned/audio    # + H8: SHA-256 and WAV header of every clip
+```
+The FLEURS splits are **not re-generated**: T1 kept the official boundaries. `verify_splits.py` re-checks T1's claims with separately written code and writes `data/splits/qa_report.json`. Result on the committed manifests and LFS audio (commit `d8ebe3e`): **all H1–H8 PASS**, 2,364/2,364 WAVs verified (SHA-256 matches manifest; IEEE-float32 mono 16 kHz header; sample count matches) — 1,902 / 210 / 252 clips, 7.9993 / 0.7899 / 0.9977 h (9.7869 h total), zero shared filename, sentence ID, normalised transcript or audio SHA-256 across splits, no rejected clip in any split, 0 near-duplicate transcript pairs (trigram Jaccard ≥ 0.8). Limitation: FLEURS TSVs have no speaker ID, so speaker disjointness relies on the official FLEURS split design and cannot be proven by ID.
 
 ## Benchmark protocol (planned, not completed)
 - Use the frozen official-boundary test subset only for final evaluation; use validation for tuning and checkpoint selection.

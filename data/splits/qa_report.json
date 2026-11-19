@@ -1,0 +1,100 @@
+{
+  "passed": true,
+  "failures": [],
+  "checks": {
+    "H1_structure": "PASS",
+    "H2_official_boundaries": "PASS",
+    "H3_only_accepted": "PASS",
+    "H4_matches_cleaned_manifest": "PASS",
+    "H5_no_cross_split_overlap": "PASS",
+    "H6_clip_format": "PASS",
+    "H7_counts_and_hours": "PASS",
+    "H8_audio_files": "PASS"
+  },
+  "splits": {
+    "train": {
+      "clips": 1902,
+      "hours": 7.9993,
+      "sentence_ids": 918,
+      "recordings_per_sentence": 2.072,
+      "gender": {
+        "FEMALE": 1023,
+        "MALE": 879
+      },
+      "min_s": 2.76,
+      "max_s": 30.0
+    },
+    "validation": {
+      "clips": 210,
+      "hours": 0.7899,
+      "sentence_ids": 133,
+      "recordings_per_sentence": 1.579,
+      "gender": {
+        "MALE": 151,
+        "FEMALE": 59
+      },
+      "min_s": 6.24,
+      "max_s": 27.6
+    },
+    "test": {
+      "clips": 252,
+      "hours": 0.997717,
+      "sentence_ids": 162,
+      "recordings_per_sentence": 1.556,
+      "gender": {
+        "FEMALE": 68,
+        "MALE": 184
+      },
+      "min_s": 4.56,
+      "max_s": 28.38
+    }
+  },
+  "total_hours": 9.786917,
+  "cross_split_overlap": {
+    "train/validation": {
+      "filename": 0,
+      "sentence_id": 0,
+      "normalized_transcript": 0,
+      "audio_sha256": 0
+    },
+    "train/test": {
+      "filename": 0,
+      "sentence_id": 0,
+      "normalized_transcript": 0,
+      "audio_sha256": 0
+    },
+    "validation/test": {
+      "filename": 0,
+      "sentence_id": 0,
+      "normalized_transcript": 0,
+      "audio_sha256": 0
+    }
+  },
+  "audio": {
+    "checked": 2364,
+    "lfs_pointer_not_downloaded": 0,
+    "missing": 0
+  },
+  "review": {
+    "R1_near_duplicate_transcripts": {
+      "threshold": 0.8,
+      "count": 0,
+      "examples": []
+    },
+    "R2_gender_per_split": {
+      "train": {
+        "FEMALE": 1023,
+        "MALE": 879
+      },
+      "validation": {
+        "MALE": 151,
+        "FEMALE": 59
+      },
+      "test": {
+        "FEMALE": 68,
+        "MALE": 184
+      }
+    },
+    "R3_speaker_ids": "Not available in FLEURS TSVs. Speaker disjointness relies on the official FLEURS split design (Conneau et al., 2022) and cannot be verified by ID here."
+  }
+}
