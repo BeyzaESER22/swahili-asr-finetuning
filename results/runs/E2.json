@@ -1,0 +1,28 @@
+{
+  "run": "E2",
+  "role": "additional_pretrained_comparator",
+  "group_training": false,
+  "model_id": "facebook/mms-1b-all",
+  "requested_revision": "main",
+  "model_commit": "3d33597edbdaaba14a8e858e2c8caa76e3cec0cd",
+  "decoding": "greedy argmax CTC, target_lang=swh",
+  "manifest": "data/splits/test.tsv",
+  "manifest_sha256": "fa9a9975daee250c8f7e242fa14da164758f9ae86c8d697b153a4a9309fac95d",
+  "num_clips": 252,
+  "limit": null,
+  "audio_hours": 0.9977,
+  "inference_seconds": 190.1,
+  "real_time_factor": 0.0529,
+  "device": "cuda",
+  "gpu": "Tesla T4",
+  "batch_size": 8,
+  "seed": 42,
+  "versions": {
+    "python": "3.13.16",
+    "torch": "2.14.1+cu130",
+    "transformers": "5.22.1"
+  },
+  "repo_commit": "9c83f5632bfcd536905ad2e4c606307b17d9aa23",
+  "predictions": "results/predictions/E2.tsv",
+  "finished_utc": "2026-11-19T21:40:01+00:00"
+}
