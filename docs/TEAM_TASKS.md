@@ -15,7 +15,7 @@
 | T0 — Project architecture, flow, candidate dataset research | `BeyzaESER22` | INITIAL DOCUMENTATION DONE; language uniqueness/approval still pending | Initial setup commits |
 | T1 — Actual dataset acquisition, raw+cleaned assets and cleaning | `BeyzaESER22` | PREPARED AND COMMITTED LOCALLY; REMOTE LFS PUSH PENDING | `data-acquisition-cleaning` |
 | T2 — Dataset QA / official-boundary and leak tests | `meltemcelik` | DONE: `src/verify_splits.py` + tests; all checks H1–H8 PASS on real data incl. 2,364 WAV hashes; `data/splits/qa_report.json` | `data-splits-quality` |
-| T3 — Whisper-Tiny main baseline + pretrained wav2vec2-CTC comparator | UNASSIGNED | NOT STARTED | `baseline-implementations` |
+| T3 — Whisper-Tiny main baseline + pretrained wav2vec2-CTC comparator | Berk (GitHub username TBD) | `src/run_baseline.py`, `src/score_predictions.py` + tests; E1 `openai/whisper-tiny`, E2 `facebook/mms-1b-all` (`swh`); results in `results/` | `baseline-implementations` |
 | T4 — Fine-tuning/training contribution | UNASSIGNED | NOT STARTED | `whisper-finetuning` |
 | T5 — Unified metrics, benchmark, error analysis | UNASSIGNED | NOT STARTED | `benchmark-evaluation` |
 | T6 — Final README verification and release-ready documentation | SHARED; final editor/reviewer TBD | NOT STARTED | `final-readme` |

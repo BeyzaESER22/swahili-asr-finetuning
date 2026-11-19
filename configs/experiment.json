@@ -51,11 +51,13 @@
       "id": "E2",
       "role": "additional_pretrained_comparator_baseline_type",
       "architecture": "wav2vec2-CTC ASR",
-      "model_id": null,
+      "model_id": "facebook/mms-1b-all",
       "model_revision": null,
       "requires_swahili_asr_head": true,
       "group_training": false,
-      "status": "NOT_RUN"
+      "status": "NOT_RUN",
+      "target_lang_adapter": "swh",
+      "note": "Candidate; verify Swahili output on smoke test. MMS-1b-all saw FLEURS train data (in-domain)."
     },
     {
       "id": "E3",
@@ -66,5 +68,7 @@
       "group_training": true,
       "status": "NOT_RUN"
     }
-  ]
+  ],
+  "reference_column": "raw_transcription",
+  "normalization": "NFC, lowercase, punctuation (Unicode P*) -> space except apostrophe, whitespace collapse; digits unchanged"
 }

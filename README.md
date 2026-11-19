@@ -55,11 +55,14 @@ All three runs must use the **same frozen test utterances**, transcription norma
 | `src/verify_splits.py` | T2: independent QA of the frozen FLEURS splits (boundaries, overlap, counts/hours, audio hashes) -> `data/splits/qa_report.json` |
 | `src/audit_manifest.py` | Earlier generic Common Voice-like metadata-only utility; not the FLEURS evidence source |
 | `src/split_manifest.py` | Speaker-group-disjoint train/validation/test split utility |
-| `src/metrics.py` | Explicit WER/CER scoring and reference normalization |
+| `src/run_baseline.py` | T3: vanilla inference for E1 Whisper-Tiny and E2 MMS wav2vec2-CTC -> `results/predictions/`, `results/runs/` |
+| `src/score_predictions.py` | Scores prediction files on the frozen test IDs with `metrics.py` -> `results/metrics.csv` |
+| `src/metrics.py` | Explicit WER/CER scoring and reference normalization (NFC, lowercase, punctuation removed except apostrophe) |
 | `tests/` | Standard-library tests for cleaning, splitting, WER/CER |
 | `configs/` | Explicit experimental choices and unresolved placeholders |
 | `results/` | Machine-produced benchmark files and predictions (empty until execution) |
 | `requirements.txt` | Exact versions of first-stage preparation/evaluation dependencies |
+| `requirements-models.txt` | Model inference dependencies for T3 (torch, transformers, soundfile) |
 | `LICENSE` | Project-owned source code license; third-party datasets retain own terms |
 
 ## Setup
@@ -84,6 +87,17 @@ git lfs pull                                                 # download the real
 python src/verify_splits.py --audio-dir data/cleaned/audio    # + H8: SHA-256 and WAV header of every clip
 ```
 The FLEURS splits are **not re-generated**: T1 kept the official boundaries. `verify_splits.py` re-checks T1's claims with separately written code and writes `data/splits/qa_report.json`. Result on the committed manifests and LFS audio (commit `d8ebe3e`): **all H1–H8 PASS**, 2,364/2,364 WAVs verified (SHA-256 matches manifest; IEEE-float32 mono 16 kHz header; sample count matches) — 1,902 / 210 / 252 clips, 7.9993 / 0.7899 / 0.9977 h (9.7869 h total), zero shared filename, sentence ID, normalised transcript or audio SHA-256 across splits, no rejected clip in any split, 0 near-duplicate transcript pairs (trigram Jaccard ≥ 0.8). Limitation: FLEURS TSVs have no speaker ID, so speaker disjointness relies on the official FLEURS split design and cannot be proven by ID.
+
+## T3 — Baselines E1 / E2 (Berk)
+```bash
+git lfs pull --include="data/cleaned/audio/test/*"            # only the 252 test WAVs
+python -m pip install -r requirements-models.txt
+python src/run_baseline.py --run E1 --limit 8 --output results/smoke/E1.tsv   # smoke test
+python src/run_baseline.py --run E1      # openai/whisper-tiny, language=sw, greedy
+python src/run_baseline.py --run E2      # facebook/mms-1b-all + Swahili adapter "swh", greedy CTC
+python src/score_predictions.py --predictions results/predictions/E1.tsv results/predictions/E2.tsv
+```
+Defaults: manifest `data/splits/test.tsv`, audio `data/cleaned/audio/test/`, reference column `raw_transcription`. Each run writes `results/predictions/<RUN>.tsv` (id, reference, hypothesis) and `results/runs/<RUN>.json` (resolved model commit, versions, device, runtime, manifest SHA-256). `score_predictions.py` refuses to score unless predictions cover exactly the 252 frozen test IDs with unchanged references. E2 (MMS-1B, ~4 GB) needs a GPU (e.g. Colab T4). **Caveat:** MMS-1b-all was fine-tuned on FLEURS training data among other corpora, so E2 is in-domain; its test split is still held out.
 
 ## Benchmark protocol (planned, not completed)
 - Use the frozen official-boundary test subset only for final evaluation; use validation for tuning and checkpoint selection.

@@ -1,0 +1,28 @@
+{
+  "run": "E1",
+  "role": "main_baseline",
+  "group_training": false,
+  "model_id": "openai/whisper-tiny",
+  "requested_revision": "main",
+  "model_commit": "169d4a4341b33bc18d8881c4b69c2e104e1cc0af",
+  "decoding": "generate, language=sw, task=transcribe, num_beams=1",
+  "manifest": "data/splits/test.tsv",
+  "manifest_sha256": "07b0341a3e7f950c83e63a32c23e9f5f3315c9cc6bfb1a9f38480370d5c00e01",
+  "num_clips": 252,
+  "limit": null,
+  "audio_hours": 0.9977,
+  "inference_seconds": 79.37,
+  "real_time_factor": 0.0221,
+  "device": "cpu",
+  "gpu": null,
+  "batch_size": 8,
+  "seed": 42,
+  "versions": {
+    "python": "3.13.0",
+    "torch": "2.15.0+cpu",
+    "transformers": "4.46.3"
+  },
+  "repo_commit": "ef68fa90875f11bfec102ba9f43588152a9e42bd",
+  "predictions": "results/predictions/E1.tsv",
+  "finished_utc": "2026-11-19T21:25:28+00:00"
+}
