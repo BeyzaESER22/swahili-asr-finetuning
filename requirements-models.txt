@@ -1,0 +1,8 @@
+# Model inference environment for T3 baselines (E1 Whisper-Tiny, E2 MMS wav2vec2-CTC). Python 3.11.
+# Install the CUDA build of torch that matches your GPU/Colab if needed: https://pytorch.org/get-started/
+-r requirements.txt
+torch==2.5.1   # Python 3.11 (Colab ok); newer Python needs a newer torch
+transformers==4.46.3
+huggingface_hub==0.26.2
+soundfile==0.12.1
+librosa==0.10.2.post1   # only used if a file is not 16 kHz
