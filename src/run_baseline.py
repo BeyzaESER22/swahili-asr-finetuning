@@ -47,6 +47,12 @@ RUNS = {
         "model_id": "facebook/mms-1b-all",
         "target_lang": "swh",      # MMS adapter code for Swahili (ISO 639-3)
     },
+    "E3": {
+        "family": "whisper",
+        "role": "trained_contribution",
+        "model_id": "results/checkpoints/E3/best",
+        "language": "sw",          # Whisper language token
+    },
 }
 
 

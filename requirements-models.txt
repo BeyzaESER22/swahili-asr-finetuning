@@ -6,3 +6,4 @@ transformers==4.46.3
 huggingface_hub==0.26.2
 soundfile==0.12.1
 librosa==0.10.2.post1   # only used if a file is not 16 kHz
+accelerate>=0.26.0
