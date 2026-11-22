@@ -1,6 +1,6 @@
 # Swahili ASR: Fine-Tuning and Reproducible Benchmark
 
-**Status (22 November 2026): FLEURS `sw_ke` data acquisition and preparation (T1/T2) and baseline runs (T3: E1, E2) are complete. The fine-tuning contribution (T4 / E3) has been trained on Google Colab T4 GPU (3 epochs, validation WER 0.4096), producing the local checkpoint in `results/checkpoints/E3/best` and test predictions in `results/predictions/E3.tsv`.**
+**Status (22 November 2026): FLEURS `sw_ke` data acquisition and preparation (T1/T2) and baseline runs (T3: E1, E2) are complete. The fine-tuning contribution (T4 / E3) has been trained on Google Colab T4 GPU (3 epochs, validation WER 0.4096), producing the local checkpoint in `results/checkpoints/E3/best` and test predictions in `results/predictions/E3.tsv`. The unified benchmark and error analysis (T5) are complete: E3 reaches WER 0.4804 / CER 0.1627 versus 1.1176 / 0.4891 for E1 (see T5 below).**
 
 ## Project objective
 Evaluate **automatic speech recognition (ASR)** for Swahili (`sw`) using a common, held-out, trustworthy transcription test set. Compare instructor-required **vanilla baselines** against separately trained/fine-tuned models. The proposed contribution is supervised fine-tuning of a specific pretrained multilingual ASR checkpoint, contingent on the Week 9 baseline list and available compute.
@@ -11,7 +11,7 @@ Evaluate **automatic speech recognition (ASR)** for Swahili (`sw`) using a commo
 
 **Whole-team final deliverables:** a technical PPTX presentation and a **finalized, verified README.md** with genuine results and runnable commands. These are mandatory work items, not automatic outputs of the initial scaffold.
 
-**To assign to other members:** independent split/leak QA, main baseline and additional comparator, fine-tuning, WER/CER benchmark, error analysis, and individual presentation sections. Final README review and slide integration are separate shared deliverables; exact owners remain to be assigned.
+**Other members:** independent split/leak QA (T2, Meltem Çelik), main baseline and additional comparator (T3, Berk Ötün), fine-tuning (T4, Asya Oral), WER/CER benchmark and error analysis (T5, Nilasu Yıldız). Each member's work is described in their own file in `contributions/`. Final README review and slide integration are separate shared deliverables.
 
 **Start from [docs/TEAM_TASKS.md](docs/TEAM_TASKS.md)** for explicit inputs, steps, commands/acceptance tests, evidence and grading traps. Do not start fine-tuning until dataset and instructor-baseline gates pass.
 
@@ -47,7 +47,7 @@ All three runs must use the **same frozen test utterances**, transcription norma
 | `docs/TEAM_TASKS.md` | Detailed member-facing implementation tasks and acceptance gates |
 | `docs/GRADING_AUDIT.md` | Instructor announcement mapped to submission evidence |
 | `docs/BASELINE_REGISTRY.md` | Instructor baseline checklist and proposed experiments |
-| `contributions/` | One correctly named file per member; currently only Beyza's verified work |
+| `contributions/` | One correctly named file per member (Beyza T1, Meltem T2, Berk T3, Asya T4, Nilasu T5) |
 | `data/raw/` | Original audio/TSV subset once acquired (currently only README) |
 | `data/cleaned/` | Actual cleaned audio/metadata generated from raw, not claimed yet |
 | `data/splits/` | Speaker-disjoint train/validation/test manifests when produced |
@@ -58,9 +58,10 @@ All three runs must use the **same frozen test utterances**, transcription norma
 | `src/run_baseline.py` | T3: vanilla inference for E1 Whisper-Tiny and E2 MMS wav2vec2-CTC -> `results/predictions/`, `results/runs/` |
 | `src/score_predictions.py` | Scores prediction files on the frozen test IDs with `metrics.py` -> `results/metrics.csv` |
 | `src/metrics.py` | Explicit WER/CER scoring and reference normalization (NFC, lowercase, punctuation removed except apostrophe) |
-| `tests/` | Standard-library tests for cleaning, splitting, WER/CER |
+| `src/error_analysis.py` | T5: bootstrap CIs, per-clip errors, subgroups, OOV, word-boundary and substitution analysis -> `results/error_analysis/` |
+| `tests/` | Standard-library tests for cleaning, splitting, baselines, training artefacts, WER/CER and error analysis |
 | `configs/` | Explicit experimental choices and unresolved placeholders |
-| `results/` | Machine-produced benchmark files and predictions (empty until execution) |
+| `results/` | Machine-produced predictions, run logs, `metrics.csv` and `error_analysis/` tables |
 | `requirements.txt` | Exact versions of first-stage preparation/evaluation dependencies |
 | `requirements-models.txt` | Model inference dependencies for T3 (torch, transformers, soundfile) |
 | `LICENSE` | Project-owned source code license; third-party datasets retain own terms |
@@ -115,9 +116,58 @@ python src/train.py --fp16 --epochs 3 --batch-size 8 --grad-accum 2 --learning-r
 python src/run_baseline.py --run E3
 ```
 
-## Benchmark protocol (T5 handoff)
-- All three runs (E1, E2, E3) are evaluated on the exact frozen test split (`data/splits/test.tsv`, 252 clips) using the shared normalizer in `src/metrics.py`.
-- Final unified multi-model scoring, subgroup breakdown and error analysis belong to T5.
+## T5 — Benchmark, statistics and error analysis (Nilasu Yıldız)
+
+All three runs are scored on the same 252 frozen test clips (`data/splits/test.tsv`) with one shared scorer. Both scripts refuse to run unless a prediction file covers exactly the frozen test IDs with unchanged reference text.
+
+```bash
+python -m pip install -r requirements.txt          # no GPU, audio or model download needed
+python src/score_predictions.py --predictions results/predictions/E1.tsv results/predictions/E2.tsv results/predictions/E3.tsv
+python src/error_analysis.py   --predictions results/predictions/E1.tsv results/predictions/E2.tsv results/predictions/E3.tsv
+python -m unittest discover -s tests -v
+```
+
+The first command writes `results/metrics.csv`; the second writes every table in `results/error_analysis/` (the first prediction file is the reference run for paired comparisons). Bootstrap resampling uses a fixed seed (42, 2,000 resamples), so reruns reproduce the committed files exactly. Neither file is edited by hand.
+
+### Metrics
+- **WER** (primary) = (S + D + I) / N: substituted, deleted and inserted words over the number of reference words, pooled over all clips (not an average of per-clip WER). Insertions can push WER above 1, which is what happens when E1 loops.
+- **CER** (secondary) = character edits / reference characters. Swahili is agglutinative, so a one-letter mistake makes a whole word wrong under WER; CER shows how close the transcript still is.
+
+### Normalisation policy (`src/metrics.py`, identical for references and hypotheses)
+Unicode NFC, lower case, every Unicode punctuation character replaced by a space **except the apostrophe**, curly apostrophe mapped to `'`, whitespace collapsed. Punctuation is removed because Whisper emits it and the FLEURS `raw_transcription` contains it, but it is not spoken. The apostrophe is kept because it is part of Swahili spelling (`ng'ombe`). Digits are **not** verbalised: `1967` vs `elfu moja...` counts as an error. The policy was fixed before E3 was scored and is covered by `tests/test_metrics.py`.
+
+### Results (`results/metrics.csv`)
+
+| Run | Role | WER | CER | WER 95% CI |
+| --- | --- | ---: | ---: | --- |
+| E1 | Whisper-Tiny, vanilla (main baseline) | 1.1176 | 0.4891 | 1.051 – 1.197 |
+| E2 | MMS-1B-all + `swh` (comparator, saw FLEURS train) | 0.1483 | 0.0367 | 0.132 – 0.165 |
+| E3 | Whisper-Tiny fine-tuned on our 8 h (contribution) | 0.4804 | 0.1627 | 0.416 – 0.562 |
+
+Paired bootstrap, E3 − E1: **−0.637 WER** (95% CI −0.732 to −0.553, p ≤ 0.001). E3 is better than E1 on 246 of 252 clips. Confidence intervals resample whole `sentence_id` clusters, because FLEURS records the same sentence with several speakers (252 clips, 162 sentences). Values from `results/error_analysis/bootstrap.csv` and `pairwise.csv`.
+
+### Error analysis (`results/error_analysis/`)
+
+| File | Content |
+| --- | --- |
+| `summary.csv` | Per run: WER/CER, S/D/I counts, insertion share, median clip WER, clips with WER > 1, repetition loops, perfect clips |
+| `utterances.tsv` | Every run × clip with its error counts and test-set metadata |
+| `subgroups.csv` | WER/CER by gender, clip duration, digits in the reference and loudness (RMS tercile) |
+| `pairwise.csv` | Clips where each run is better / worse / equal compared with E1 |
+| `bootstrap.csv` | 95% CI per run and paired differences with p-values |
+| `oov.csv` | Error rate on reference words seen vs never seen in the training transcripts |
+| `word_boundary.csv` | CER with and without spaces; share of character edits that are merged/split words |
+| `substitution_categories.csv` | Where substituted words differ: short function word, word start, middle, end, unrelated |
+| `substitutions.tsv` | Most frequent reference → hypothesis word substitutions |
+| `examples.md` | Best, median and worst clips per run for qualitative review |
+
+Main findings:
+- **E1's problem is mostly wrong words, not only loops.** 24 clips contain a repetition loop (an n-gram of up to 3 words repeated back-to-back at least 4 times; natural reduplication such as `pole pole` stays below this threshold), but substitutions are 3,849 of 5,758 errors and WER stays 0.92 even without the clips above WER 1. In E3 loops drop to 5 clips, although insertions remain 26% of its errors.
+- **Fine-tuning helps most on words seen in training.** 1,064 of 5,152 test words (21%) never occur in the training transcripts. E3's error rate is 27% on seen words but 70% on unseen ones (E1: 90% / 92%). Unseen words are rarer and often names, so even E2 triples its error on them (10% / 31%), but this shows the limit of 8 hours of data.
+- **E3's errors become near misses.** Substitutions with nothing in common with the reference fall from 69% (E1) to 31% (E3); the rest differ only at the start, middle or end of the word. Merged/split words account for 24% (E1) and 19% (E3) of character edits.
+- **Quiet recordings are the weakest subgroup** for every model: E3 WER 0.62 on the quietest RMS tercile vs 0.37 on the loudest. Clips containing digits are also worse (0.58 vs 0.46).
+
+Limitations: FLEURS has no speaker IDs, so no per-speaker analysis is possible; some subgroups are small (30–39 clips), so their differences carry wide uncertainty; the substitution categories are a character-overlap heuristic, not a morphological parser; E2's low error is in-domain because MMS was trained on FLEURS.
 
 ## Reproducibility and grading
 - Every member commits their own work from their own GitHub account.

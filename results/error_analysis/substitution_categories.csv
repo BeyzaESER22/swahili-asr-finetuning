@@ -1,0 +1,16 @@
+run,category,count,share
+E1,function_word,231,0.06
+E1,start,378,0.0982
+E1,middle,194,0.0504
+E1,end,409,0.1063
+E1,other,2637,0.6851
+E2,function_word,60,0.0951
+E2,start,99,0.1569
+E2,middle,275,0.4358
+E2,end,127,0.2013
+E2,other,70,0.1109
+E3,function_word,112,0.0661
+E3,start,334,0.1971
+E3,middle,458,0.2702
+E3,end,271,0.1599
+E3,other,520,0.3068

@@ -64,7 +64,7 @@ def main():
     args.output.parent.mkdir(parents=True, exist_ok=True)
     fields = ["run", "role", "model_id", "model_commit", "n_utterances", "wer", "cer"]
     with args.output.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
+        writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore", lineterminator="\n")
         writer.writeheader()
         writer.writerows(table)
     print(f"Wrote {args.output}")

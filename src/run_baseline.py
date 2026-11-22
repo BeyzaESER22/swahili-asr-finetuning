@@ -116,6 +116,11 @@ def load_audio(path: Path):
     return audio
 
 
+def group_training(cfg: dict) -> bool:
+    """Only the fine-tuned contribution was trained by the group; E1/E2 are used as published."""
+    return cfg["role"] == "trained_contribution"
+
+
 def resolve_revision(model_id: str, revision: str) -> str:
     """Turn a branch/tag (e.g. 'main') into the immutable commit hash we actually load."""
     if Path(model_id).exists():
@@ -215,7 +220,7 @@ def main():
     meta = {
         "run": args.run,
         "role": cfg["role"],
-        "group_training": False,
+        "group_training": group_training(cfg),
         "model_id": model_id,
         "requested_revision": args.revision,
         "model_commit": commit,
