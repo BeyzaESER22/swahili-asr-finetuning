@@ -1,6 +1,6 @@
 # Swahili ASR: Fine-Tuning and Reproducible Benchmark
 
-**Status (17 November 2026): FLEURS `sw_ke` data acquisition, full waveform audit, deterministic 9.786916667-hour selection, preparation code, manifests and Git LFS staging are complete locally. No model has been trained and no benchmark scores are claimed. Remote data upload still requires repository authentication and LFS quota confirmation.**
+**Status (22 November 2026): FLEURS `sw_ke` data acquisition and preparation (T1/T2) and baseline runs (T3: E1, E2) are complete. The fine-tuning contribution (T4 / E3) has been trained on Google Colab T4 GPU (3 epochs, validation WER 0.4096), producing the local checkpoint in `results/checkpoints/E3/best` and test predictions in `results/predictions/E3.tsv`.**
 
 ## Project objective
 Evaluate **automatic speech recognition (ASR)** for Swahili (`sw`) using a common, held-out, trustworthy transcription test set. Compare instructor-required **vanilla baselines** against separately trained/fine-tuned models. The proposed contribution is supervised fine-tuning of a specific pretrained multilingual ASR checkpoint, contingent on the Week 9 baseline list and available compute.
@@ -99,15 +99,25 @@ python src/score_predictions.py --predictions results/predictions/E1.tsv results
 ```
 Defaults: manifest `data/splits/test.tsv`, audio `data/cleaned/audio/test/`, reference column `raw_transcription`. Each run writes `results/predictions/<RUN>.tsv` (id, reference, hypothesis) and `results/runs/<RUN>.json` (resolved model commit, versions, device, runtime, manifest SHA-256). `score_predictions.py` refuses to score unless predictions cover exactly the 252 frozen test IDs with unchanged references. E2 (MMS-1B, ~4 GB) needs a GPU (e.g. Colab T4). **Caveat:** MMS-1b-all was fine-tuned on FLEURS training data among other corpora, so E2 is in-domain; its test split is still held out.
 
-## Benchmark protocol (planned, not completed)
-- Use the frozen official-boundary test subset only for final evaluation; use validation for tuning and checkpoint selection.
-- Main baseline: vanilla Whisper-Tiny inference; additional comparator: Swahili ASR-head-equipped wav2vec2-CTC pretrained inference; fine-tune Whisper-Tiny as the group's contribution. Re-check additional written course obligations if supplied.
-- Contribution: separately fine-tune an explicitly named pretrained ASR checkpoint; save the exact revision, seed, checkpoints, preprocessing version, training logs and predictions.
-- Primary: **WER** (word insertions + deletions + substitutions / reference word count). Secondary: **CER**, to complement WER on Swahili morphology. Record text-normalization rules identically for gold/reference and predictions, and save the per-utterance predictions.
-- Optional: inference latency and train-set-size ablation, properly standardized and labeled.
-- Never invent ground-truth transcripts. Never use a different model's output as verified reference.
+## T4 — Whisper-Tiny fine-tuning contribution (Asya Oral)
 
-**No results are reported until scripts, data, checkpoints / independently reproducible training route, predictions, configuration and outputs are committed and tested.**
+The fine-tuning contribution (E3) trains `openai/whisper-tiny` (pinned base revision `169d4a4341b33bc18d8881c4b69c2e104e1cc0af`) on `data/splits/train.tsv` (1,902 clips, ~8h) with validation on `data/splits/validation.tsv` (210 clips, ~0.8h) using Google Colab T4 GPU:
+- Training protocol: 3 epochs, batch size 8, gradient accumulation 2 (effective batch 16), lr 1e-4, warmup 50, fp16.
+- The best checkpoint was selected by validation WER (0.4096, loss 0.8235) and saved locally to `results/checkpoints/E3/best` (backed up in `E3_backup.zip`).
+- Full training logs and hardware metrics are saved in `results/runs/E3_train.json`.
+- Inference on the frozen test split (`data/splits/test.tsv`, 252 clips) generates `results/predictions/E3.tsv` and `results/runs/E3.json`.
+
+```bash
+# E3 fine-tuning training command:
+python src/train.py --fp16 --epochs 3 --batch-size 8 --grad-accum 2 --learning-rate 1e-4 --output-dir results/checkpoints/E3
+
+# E3 test-set inference:
+python src/run_baseline.py --run E3
+```
+
+## Benchmark protocol (T5 handoff)
+- All three runs (E1, E2, E3) are evaluated on the exact frozen test split (`data/splits/test.tsv`, 252 clips) using the shared normalizer in `src/metrics.py`.
+- Final unified multi-model scoring, subgroup breakdown and error analysis belong to T5.
 
 ## Reproducibility and grading
 - Every member commits their own work from their own GitHub account.

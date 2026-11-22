@@ -16,7 +16,7 @@
 | T1 — Actual dataset acquisition, raw+cleaned assets and cleaning | `BeyzaESER22` | PREPARED AND COMMITTED LOCALLY; REMOTE LFS PUSH PENDING | `data-acquisition-cleaning` |
 | T2 — Dataset QA / official-boundary and leak tests | `meltemcelik` | DONE: `src/verify_splits.py` + tests; all checks H1–H8 PASS on real data incl. 2,364 WAV hashes; `data/splits/qa_report.json` | `data-splits-quality` |
 | T3 — Whisper-Tiny main baseline + pretrained wav2vec2-CTC comparator | `berkotun` | DONE: `src/run_baseline.py`, `src/score_predictions.py` + tests; E1 `openai/whisper-tiny`, E2 `facebook/mms-1b-all` (`swh`); results in `results/metrics.csv` | `baseline-implementations` |
-| T4 — Fine-tuning/training contribution | UNASSIGNED | NOT STARTED | `whisper-finetuning` |
+| T4 — Fine-tuning/training contribution | `asyaoral` | DONE: Whisper-Tiny fine-tuning on T4 GPU (val_wer 0.4096, 3 epochs); checkpoint `results/checkpoints/E3/best`, logs in `results/runs/E3_train.json`, predictions in `results/predictions/E3.tsv` | `whisper-finetuning` |
 | T5 — Unified metrics, benchmark, error analysis | UNASSIGNED | NOT STARTED | `benchmark-evaluation` |
 | T6 — Final README verification and release-ready documentation | SHARED; final editor/reviewer TBD | NOT STARTED | `final-readme` |
 | T7 — Technical PPTX presentation, rehearsals and submission | SHARED; slide owner/presenter TBD | NOT STARTED | `presentation` |
@@ -65,7 +65,7 @@
 **Done only when:** E1 and E2 have independently repeatable inference and identical test IDs/scorer, and the results are separately labeled main baseline versus additional pretrained comparator.
 **Grading risk:** missing baseline loses Correctness + Rigor. 'Qwen3-ASR is advanced' alone is **not** a student contribution.
 
-## T4 — Pretrained-model fine-tuning contribution (future ML implementer)
+## T4 — Pretrained-model fine-tuning contribution (Asya Oral; completed)
 **Inputs:** frozen T2 data (maximum 10 total hours: ~8h training/~1h validation/~1h test); exact `openai/whisper-tiny` base checkpoint revision; T3 E1 baseline; compute allocation.
 **Steps:**
 1. Explain full ASR path: waveform -> resampling -> acoustic features -> encoder -> autoregressive decoder/tokenizer -> transcript. Show tensor shapes; training objective/cross-entropy, teacher forcing, gradient flow and decoding constraints.

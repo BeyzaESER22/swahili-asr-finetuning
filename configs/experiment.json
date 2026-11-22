@@ -1,5 +1,5 @@
 {
-  "status": "DATA_PREPARED_LOCALLY_NO_TRAINING",
+  "status": "E3_TRAINED_LOCALLY",
   "seed": 42,
   "language": "sw",
   "primary_dataset": "Google FLEURS sw_ke",
@@ -43,19 +43,19 @@
       "role": "main_baseline",
       "architecture": "Whisper encoder-decoder",
       "model_id": "openai/whisper-tiny",
-      "model_revision": null,
+      "model_revision": "169d4a4341b33bc18d8881c4b69c2e104e1cc0af",
       "group_training": false,
-      "status": "NOT_RUN"
+      "status": "EVALUATED"
     },
     {
       "id": "E2",
       "role": "additional_pretrained_comparator_baseline_type",
       "architecture": "wav2vec2-CTC ASR",
       "model_id": "facebook/mms-1b-all",
-      "model_revision": null,
+      "model_revision": "3d33597edbdaaba14a8e858e2c8caa76e3cec0cd",
       "requires_swahili_asr_head": true,
       "group_training": false,
-      "status": "NOT_RUN",
+      "status": "EVALUATED",
       "target_lang_adapter": "swh",
       "note": "Candidate; verify Swahili output on smoke test. MMS-1b-all saw FLEURS train data (in-domain)."
     },
@@ -65,8 +65,11 @@
       "architecture": "Whisper encoder-decoder",
       "base_model_id": "openai/whisper-tiny",
       "base_model_revision": "169d4a4341b33bc18d8881c4b69c2e104e1cc0af",
+      "checkpoint_path": "results/checkpoints/E3/best",
+      "checkpoint_backup": "E3_backup.zip",
+      "validation_wer": 0.409597,
       "group_training": true,
-      "status": "CONFIGURED",
+      "status": "TRAINED_AND_EVALUATED",
       "training_config": {
         "train_manifest": "data/splits/train.tsv",
         "validation_manifest": "data/splits/validation.tsv",

@@ -118,6 +118,8 @@ def load_audio(path: Path):
 
 def resolve_revision(model_id: str, revision: str) -> str:
     """Turn a branch/tag (e.g. 'main') into the immutable commit hash we actually load."""
+    if Path(model_id).exists():
+        return "local_checkpoint"
     try:
         from huggingface_hub import HfApi
 
